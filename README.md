@@ -1,5 +1,6 @@
 # Lucy
-<img src="https://github.com/Irev-Dev/Lucy/blob/master/Images/IMG_3237.JPG" alt="image1" width="50%" align="left"> <img src="https://github.com/Irev-Dev/Lucy/blob/Irev-Dev-expanding-readme/Images/Capture2.PNG" width="50%" align="right">
+<img src="https://github.com/Irev-Dev/Lucy/blob/master/Images/IMG_3237.JPG" alt="image1" width="50%" align="left"> 
+<img src="https://github.com/Irev-Dev/Lucy/blob/Irev-Dev-expanding-readme/Images/Capture2.PNG" width="50%" align="right">
 
 OpenSCAD/Parametric Miniquad Frame, designed with agressively tilted body and with flat arms for minimal blockage of the thrust columns. The result is a quad that is most aerodynamic when flown at its most agressive angle as opposed to most miniquad frames which become less aerodynamic the further forward they are tilted.
 
@@ -20,6 +21,7 @@ Most dimensions can be tweaked. The image above for example shows the angle of t
 ### Low Drag
 This is where I hope this frame will come into it's own. Most quad frams have a elongated body which creates negitive lift while flying and creates more drag the more agressively the quad is flown, while compact frames reduce this somewhat the arms of the quad still block a large amount of the thrust column which is inevitable when the motors are mounted directly to carbon fiber sheet. Lucy Kwad get around this by having a very agressivly tilted body and tilted motor mounts. The body is tilted further than the camera angle so that during medium speed flight there is some drag but also some positive lift and in top speed flight the frame should will be tilt so to have the least drag. The arms of the quad are tilted at the same angle as the body thanks to the tilted motor mounts.
 The image below shows the body tilt at a greater angle than the camera. 70 degrees in the images though this is a guess, testing is needed.
+
 <img src="https://github.com/Irev-Dev/Lucy/blob/Irev-Dev-expanding-readme/Images/Capture1b.PNG" width="50%" align="middle">
 
 
