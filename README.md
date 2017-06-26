@@ -1,5 +1,6 @@
 # Lucy
 ![alt text][img1]
+<img src="https://github.com/Irev-Dev/Lucy/blob/master/Images/IMG_3237.JPG" alt="image1" width="50%">
 
 [img1]: https://github.com/Irev-Dev/Lucy/blob/master/Images/IMG_3237.JPG "image1"
 
