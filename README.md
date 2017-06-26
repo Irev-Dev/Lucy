@@ -3,7 +3,7 @@
 
 OpenSCAD/Parametric Miniquad Frame, designed with aggressively tilted body and with flat arms for minimal blockage of the thrust columns. The result is a quad that is most aerodynamic when flown at its most aggressive angle as opposed to most miniquad frames which become less aerodynamic the further forward they are tilted.
 
-Named after [Lucy Gonzalez Parsons](https://www.youtube.com/watch?v=XrSSR_JgHME "More Dangerous Than a Thousand Rioters: The Revolutionary Life of Lucy Parsons") 
+Named after [Lucy Gonzalez Parsons](https://www.youtube.com/watch?v=m1AOZlUflgo "More Dangerous Than a Thousand Rioters: The Revolutionary Life of Lucy Parsons") 
 
 The frame is intended to be made from carbonfiber with some printed parts. It's currently being prototyped so contributions are welcome. The frame also has a [thingiverse](https://www.thingiverse.com/thing:2403189) page, though I prefer to colaborate on github.
 
