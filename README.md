@@ -1,6 +1,5 @@
 # Lucy
 <img src="https://github.com/Irev-Dev/Lucy/blob/master/Images/IMG_3237.JPG" alt="image1" width="50%" align="left"> 
-<img src="https://github.com/Irev-Dev/Lucy/blob/Irev-Dev-expanding-readme/Images/Capture2.PNG" width="50%" align="right">
 
 OpenSCAD/Parametric Miniquad Frame, designed with agressively tilted body and with flat arms for minimal blockage of the thrust columns. The result is a quad that is most aerodynamic when flown at its most agressive angle as opposed to most miniquad frames which become less aerodynamic the further forward they are tilted.
 
