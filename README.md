@@ -5,7 +5,7 @@ OpenSCAD/Parametric Miniquad Frame, designed with agressively tilted body and wi
 
 Named after [Lucy Gonzalez Parsons](https://www.youtube.com/watch?v=XrSSR_JgHME "More Dangerous Than a Thousand Rioters: The Revolutionary Life of Lucy Parsons") 
 
-The frame is intended to be made from carbonfiber with some printed parts. It's currently being prototyped so contributions are welcome.
+The frame is intended to be made from carbonfiber with some printed parts. It's currently being prototyped so contributions are welcome. The frame also has a [thingiverse](https://www.thingiverse.com/thing:2403189) page, though I prefer to colaborate on github.
 
 ## Contributing
 I thought it was about time I got this code up on github, so I don't have any immediate ideas of ways to contribute. I need to do an initial tidy of the code and then maybe I'll put together a plan of improvements/features that can be done. But by all means contact me with ideas or make a change and make a pull request.
