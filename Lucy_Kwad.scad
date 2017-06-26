@@ -15,12 +15,11 @@ _-_-_-_the following are big changes and should be made under new revisions_-_-_
 
 //VARIABLES//
 //$fn=55;
-echo(sin(20));
-mot_s = [25.4*5,25.4*5+37,70,25.4*5+5]; //[x,yforLowMots,Z,YforUpMots]
+mot_s = [25.4*5,25.4*5+37,80,25.4*5+5]; //[x,yforLowMots,Z,YforUpMots]
 theta = 70;
 motP_MT = 3;//material thickness
 motP_MT2=3;
-motP_mntS=[6,9,7,10];//mount hole spacing [radA1,radA2,radB1,radB2]
+motP_mntS=[16/2,16/2,19/2,19/2];//mount hole spacing [radA1,radA2,radB1,radB2]
 motP_mntD = 3.2;//mounting hole diametr
 motP_dia = 25;
 motP_CD=6; //counter dia
@@ -55,20 +54,27 @@ UWB_minP=0.5;//min print thickness (support material)
 UWB_HoS=6; //hex or square 4=square 6=hex
 
 //FR fuselage rails
-fs=[180,38,39]; //length width height
+fs=[180,40,39]; //length width height
 fusehozoff=-10;
 FR=[4,5,6,65,35]; //[carbon thickness,other thickness,trasition radius, front angle, rear angle]
 CarRT=4;
 CarBT=FR[0];
 RCutT=5.5;
-//FR_fast=[3.2,5,15,5.5,3,6];//[0dia,1head dia,2head angle,3hex dia,4hex depth,5hexOrSquare]fastner options
-//FR_min=[4,4,4,5];//minimum thicknesses
+
 FR_SD=[5,5];//slot depth1,slot depth2
 FR_tol=0.2;
 
 Stack_HS=30.5;
 Stack_HD=3.2;
 Stack_PcbW=38;
+
+camL=30;
+camH=25;
+camW=25;
+camD=15;
+camPP=3;
+camPD=2;
+camA=35;
 
 //CALCULATIONS// and some varibles
 
@@ -79,10 +85,9 @@ carbW=[30,20,4,2]; //wing [base width, tip width, thickness,radius]
 carbWmin=1.5;
 carbLWTO = [-5,-3,20]; //lower wing tip offset [x,y,z]
 carbLWR=[10,20];//lower wing radius [front,rear]
-carbLWP=[20,17.5,mot_cords[0][2]+carbLWTO[2]]; //lower wing placement [x,y,z]
-carbUWP=[-15,(fs[1]+carbW[2])/2,carbLWP[2]+UWB_MO[1]]; //lower wing placement [x,y,z]
+carbLWP=[25,fs[1]/2,mot_cords[0][2]+carbLWTO[2]]; //lower wing placement [x,y,z]
+carbUWP=[-10,(fs[1]+carbW[2])/2,carbLWP[2]+UWB_MO[1]]; //lower wing placement [x,y,z]
 carbUWTO = [-1,-12,0]; //lower wing tip offset [x,y,z]
-//carbB = 4;
 
 
 LWXang = atan((mot_cords[0][2]+carbLWTO[2]-carbLWP[2])/(mot_cords[0][1]+carbLWTO[1]-carbLWP[1]));
@@ -91,22 +96,11 @@ UWRYang=abs(atan((mot_cords[1][2]+carbUWTO[2]-carbUWP[2])/cos(90-UWXang)/(mot_co
 UWFYang=abs(atan((mot_cords[1][2]+carbUWTO[2]-carbUWP[2])/cos(90-UWXang)/(mot_cords[1][0]+carbUWTO[0]-carbUWP[0]-carbW[3])));
 
 //RENDERS///////////////////////////////////////////////////////////
-wantToPrint=0;
-rotate([0,0,0])for(i=[0,1])mirror([0,i,0]){
+wantToPrint=1; //0 for model, 1 to print parts
+rotate([0,-0,0])for(i=[0,1])mirror([0,i,0]){
  //translate([0,0,carbLWP[2]-carbW[2]/2])fuse();
  
- translate([fs[0]/2+fusehozoff,0,carbLWP[2]-carbW[2]/2])mirror([1,0,0])thefuselage(fuseHt=fs[2],
-frntDia=40,
-rearDia=70.1,
-RCT1 = CarRT,//rail carbon thickness
-RCT2 = RCutT,//rail carbon thickness (cut thickness)
-BCT1 =CarBT, //base carbon thickness
-slotD=FR_SD[0],
-tol=FR_tol,
-totLength=fs[0],
-fuseW=fs[1],
-mergeR=[5,10],
-mergeT=3);
+ translate([fs[0]/2+fusehozoff,0,carbLWP[2]-carbW[2]/2])mirror([1,0,0])thefuselage(fuseHt=fs[2],frntDia=40,rearDia=70.1,RCT1 = CarRT,RCT2 = RCutT,BCT1 =CarBT,slotD=FR_SD[0],tol=FR_tol,totLength=fs[0],fuseW=fs[1],mergeR=[5,10],mergeT=3);
  rotate([0,(180-theta)*wantToPrint,0])motMntL(39);
  rotate([0,(180-theta)*wantToPrint,0])motMntU(30);
  wingL();
@@ -115,10 +109,27 @@ mergeT=3);
  if(wantToPrint==0){
 	motSpace(0)rotate([0,theta,0])translate([0,0,17.5+motP_MT])for(i=[0:2:360]) rotate([0,0,i])cube([25.4*2.5,0.1,0.2]);
 	motSpace(1)rotate([0,theta,0])translate([0,0,17.5+motP_MT])for(i=[0:2:360]) rotate([0,0,i])cube([25.4*2.5,0.1,0.2]);
+    thecam();
  }
 }
 
 //MODULES//////////////////
+
+module thecam(){
+    translate([72,0,cos(theta-camA)*(camD/2)+carbLWP[2]+CarBT/2])rotate([0,theta-camA,0])difference(){
+        union(){
+            hull(){
+                translate([-camL,-camW/2,-camH/2])cube([3,camW,camH]);
+                rotate([0,90,0])cylinder(d=camD,h=0.01);
+                
+            }
+        }
+        union(){
+            
+        }
+    }  
+}
+
 
 module stackMountHoles(holeD=3.2,holeS=30.5){
  for(i=[0,90])rotate([0,0,i])translate([holeS/2,holeS/2,-10])cylinder(d=holeD,h=20); 
@@ -315,6 +326,7 @@ slotD=6,tol=0.1,totLength=150,fuseW=40,mergeR=[5,10],boltD=3.2,mergeT=3){
 	}
 	union(){
 	 translate([fs[0]-Stack_PcbW/2-slotD-RCutT,0,0])stackMountHoles(Stack_HD,Stack_HS);
+     translate([camL+Stack_PcbW/2+10,0,0])stackMountHoles(Stack_HD,Stack_HS);
 	 translate([fs[0]/2+fusehozoff,0,-carbLWP[2]+carbW[2]/2])mirror([1,0,0]){
 		translate([carbUWP[0]-carbW[0]+UWB_MT2/2+UWB_Hdia/2,fs[1]/2-UWB_MT2/2-UWB_Hdia/2,carbLWP[2]+FR[0]/2-UWB_MT1*4])cylinder(h=UWB_MT1*8,d=UWB_Hdia);
 		translate([carbUWP[0]-UWB_MT2/2-UWB_Hdia/2,fs[1]/2-UWB_MT2/2-UWB_Hdia/2,carbLWP[2]+FR[0]/2-UWB_MT1*4])cylinder(h=UWB_MT1*7,d=UWB_Hdia);
