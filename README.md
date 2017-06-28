@@ -23,4 +23,9 @@ The image below shows the body tilt at a greater angle than the camera. 70 degre
 
 <img src="https://github.com/Irev-Dev/Lucy/blob/master/Images/Capture1b.PNG" width="50%" align="middle">
 
+## Updates
+
+28/06/2017 - I have spent the last two nights getting the code ready enough to print for the first (what I hope will be) flyable version. I got motivated when my motors arrived. I will print it out of PLA, it won't last long but hopefully I get an idea of how it will fly. 
+
+
 
