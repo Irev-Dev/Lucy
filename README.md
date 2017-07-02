@@ -1,5 +1,5 @@
 # Lucy
-<img src="https://github.com/Irev-Dev/Lucy/blob/master/Images/IMG_3237.JPG" alt="image1" width="50%" align="left"> 
+<img src="https://github.com/Irev-Dev/Lucy/blob/master/Images/IMG_3259.JPG" alt="image1" width="50%" align="left"> 
 
 OpenSCAD/Parametric Miniquad Frame, designed with aggressively tilted body and with flat arms for minimal blockage of the thrust columns. The result is a quad that is most aerodynamic when flown at its most aggressive angle as opposed to most miniquad frames which become less aerodynamic the further forward they are tilted.
 
@@ -25,7 +25,14 @@ The image below shows the body tilt at a greater angle than the camera. 70 degre
 
 ## Updates
 
+26/06/2017 - Inital commit
+
+<img src="https://github.com/Irev-Dev/Lucy/blob/master/Images/IMG_3237.JPG" alt="image1" width="50%" align="left"> 
+
 28/06/2017 - I have spent the last two nights getting the code ready enough to print for the first (what I hope will be) flyable version. I got motivated when my motors arrived. I will print it out of PLA, it won't last long but hopefully I get an idea of how it will fly. 
 
+30/06/2017 - I have done about 70% of the build for the first prototype. I'm getting excited. I had to put the props on just to see what it looks like, pretty happy with the aesthetics :)
+The PLA is definitely worrisome. Because of the design of the quad the arms are still rigid enough in the direction of thrust bit I'm worried about the torque of the motors during fast spool ups. If it expodes when I punch it I just hope it doesn't damage any of the electronics. 
 
+<img src="https://github.com/Irev-Dev/Lucy/blob/master/Images/IMG_3259.JPG" width="50%" align="middle">
 
