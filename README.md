@@ -36,3 +36,8 @@ The PLA is definitely worrisome. Because of the design of the quad the arms are 
 
 <img src="https://github.com/Irev-Dev/Lucy/blob/master/Images/IMG_3259.JPG" width="510" align="middle">
 
+11/08/2017 - Got back to working on this and finish the electronics for the first prototype, ran into some interesting problems. With the default PID's as soon the quad armed it would start vibrating and would generate enough lift form trying to correct itself that it would start to take off. halving the PID values didn't fix it, and neither did quartering them. Then I tried re-enforcing the arms quickly with some balsa wood (as shown below) and now it seems to fly well with halved default PID values. This is the problem with using PLA, I won't be able to tune it properly and therefore see how it will actually fly until I bite the bullet and get it made in carbon fiber. It's been interesting trying to get it to fly though.
+
+I have only done line of sight hovering so far, I hope to take it for a good FPV flight soon.
+
+<img src="https://github.com/Irev-Dev/Lucy/blob/master/Images/IMG_3329.JPG" width="510" align="middle">
