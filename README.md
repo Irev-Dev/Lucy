@@ -34,10 +34,14 @@ The image below shows the body tilt at a greater angle than the camera. 70 degre
 30/06/2017 - I have done about 70% of the build for the first prototype. I'm getting excited. I had to put the props on just to see what it looks like, pretty happy with the aesthetics :)
 The PLA is definitely worrisome. Because of the design of the quad the arms are still rigid enough in the direction of thrust bit I'm worried about the torque of the motors during fast spool ups. If it expodes when I punch it I just hope it doesn't damage any of the electronics. 
 
+<a href="https://vimeo.com/229491718"><img src="https://github.com/Irev-Dev/Lucy/blob/master/Images/vidim_TL1.png"></a>
+
 <img src="https://github.com/Irev-Dev/Lucy/blob/master/Images/IMG_3259.JPG" width="510" align="middle">
 
 11/08/2017 - Got back to working on this and finish the electronics for the first prototype, ran into some interesting problems. With the default PID's as soon the quad armed it would start vibrating and would generate enough lift form trying to correct itself that it would start to take off. halving the PID values didn't fix it, and neither did quartering them. Then I tried re-enforcing the arms quickly with some balsa wood (as shown below) and now it seems to fly well with halved default PID values. This is the problem with using PLA, I won't be able to tune it properly and therefore see how it will actually fly until I bite the bullet and get it made in carbon fiber. It's been interesting trying to get it to fly though.
 
 I have only done line of sight hovering so far, I hope to take it for a good FPV flight soon.
+
+<a href="https://vimeo.com/229526189"><img src="https://github.com/Irev-Dev/Lucy/blob/master/Images/vidim_firstflight.png"></a>
 
 <img src="https://github.com/Irev-Dev/Lucy/blob/master/Images/IMG_3329.JPG" width="510" align="middle">
