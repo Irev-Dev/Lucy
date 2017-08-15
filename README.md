@@ -46,6 +46,6 @@ I have only done line of sight hovering so far, I hope to take it for a good FPV
 
 <img src="https://github.com/Irev-Dev/Lucy/blob/master/Images/IMG_3329.JPG" width="510" align="middle">
 
-15/08/2017 - A large update to the Lucy code just got merged into the master project on github. The change centers around the heavy use of the [polyRound()](https://github.com/Irev-Dev/Round-Anything) function instead of relying on primitives so much.Snap shot of the work in progress below.
+15/08/2017 - A large update to the Lucy code just got merged into the master project on github. The change centers around the heavy use of the [polyRound()](https://github.com/Irev-Dev/Round-Anything) function instead of relying on primitives so much. Snap shot of the work in progress below.
 
-<img src="https://github.com/Irev-Dev/Lucy/blob/master/Images/snapshot20170815.png" width="510" align="middle">
+<img src="https://github.com/Irev-Dev/Lucy/blob/master/Images/snapshot20170815.png" align="middle">
