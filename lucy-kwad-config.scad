@@ -1,16 +1,3 @@
-/*
---Rev1-- Changing the direction somewhat for rev 1:
-	Firstly the bottom part of the fuselage and the lower wings will be on the same plane and therefore can be cut from a single pice of carbon fibre
-	and orginally the motor mounts rapped around both sides of the wing tips, but now mount to a sing side.
---Rev3-- implementing coording spaces for mounting holes
-*/
-/*ToDo
---delete un-used variables (also there are a few floating around) this is half done, unused ones are commented out
---at FC and camera hole mount on fuselage
-_-_-_-_the following are big changes and should be made under new revisions_-_-_-_
---add coordinate spaces for all mounting holes (besides motors) this will make the code much more oncise and easy to follow.
---Big change!, define the wings (start with the Upper wings) with a plane and cordinates instead of the hull method it will make the wing braces much easier to make and easier to understand the code.
-*/
 
 //include the modules 
 include <lucy-kwad-modules.scad>
@@ -272,21 +259,20 @@ LWing_MFBMX=interpX([LWingRP[3].x,LWingRP[3].y],[LWingRP[2].x,LWingRP[2].y],LWin
 LWing_MRBMX=interpX([LWingRP[0].x,LWingRP[0].y],[LWingRP[1].x,LWingRP[1].y],LWing_MRBMY);//motor rear bottom mount X
 LWing_MRBMSX=interpX([LWingRP[0].x,LWingRP[0].y],[LWingRP[1].x,LWingRP[1].y],LWing_MRBMSY);//motor front bottom mount Small X
 LWing_MMP=[//motor mount points
-	//[LWing_MFBMX-5,		LWing_MFBMY,		0],
 	[LWing_MFBMX,		LWing_MFBMY,		0],
 	LWingRP[2],
 	LWingRP[1],
-	[LWing_MRBMX,		LWing_MRBMY,	0]
+	[LWing_MRBMX,		LWing_MRBMY,	0],
+	[LWing_MRBMX+5,		LWing_MRBMY,	0]
 ];
 LWing_MMPS=[//motor mount points small
-	//[LWing_MRBMSX-5,		LWing_MRBMSY,		0],
 	[LWing_MRBMSX,		LWing_MRBMSY,		0],
 	LWingRP[1],
 	LWingRP[2],
 	[LWing_MFBMX,		LWing_MFBMY,	0]
 ];
 LWing_XMHO=-carbWmin/cos(getAngle(LWingRP[3],LWingRP[2]));//X mount hole offset
-LWing_MMH=round3points([UWing_MMP[2],[LWing_MMP[3][0],LWing_MMP[3][1],motP_mntD/2],LWing_MMP[0]])[2]+[-LWing_XMHO,0];//motor mount hole
+LWing_MMH=round3points([LWing_MMP[2],[LWing_MMP[3][0],LWing_MMP[3][1],motP_mntD/2],LWing_MMP[0]])[2]+[-LWing_XMHO,0];//motor mount hole
 
 
 //RENDERS///////////////////////////////////////////////////////////
@@ -299,7 +285,7 @@ rotate([0,0,0])for(i=[0,1])mirror([0,i,0]){
  color("blue")fuseRev2();
  color("purple")
  fuseRailsRev2();
-/* color("cyan")*/%rotate([0,(180-theta)*wantToPrint,0])motMntL(39);
+/* color("cyan")*/rotate([0,(180-theta)*wantToPrint,0])motMntL(39);
  /*color("red")*/rotate([0,(180-theta)*wantToPrint,0])motMntU(30);
  UWingBrace2();
  //wingL();
