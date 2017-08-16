@@ -6,7 +6,7 @@ include <polyround.scad>
 
 //VARIABLES//
 PropD=5*25.4;//propsize inch
-//$fn=20;
+$fn=20;
 mot_s = [PropD+8,PropD+40,100,PropD+12]; //[x,yforLowMots,Z,YforUpMots]
 theta = 70;
 motP_MT = 3;//material thickness
@@ -279,26 +279,26 @@ LWing_MMH=round3points([LWing_MMP[2],[LWing_MMP[3][0],LWing_MMP[3][1],motP_mntD/
 wantToPrint=0; //0 for model, 1 to print parts
 rotate([0,0,0])for(i=[0,1])mirror([0,i,0]){
  //translate([fs[0]/2+fusehozoff,0,carbLWP[2]-carbW[2]/2])mirror([1,0,0])thefuselage(fuseHt=fs[2],frntDia=45,rearDia=70,RCT1 = CarRT,RCT2 = RCutT,BCT1 =CarBT,slotD=FR_SD[0],tol=FR_tol,totLength=fs[0],fuseW=fs[1],mergeR=[5,10],mergeT=3);
- teather();
- color("green")
+ color("grey"){
  wingUrev2(6.2,0);
- color("blue")fuseRev2();
- color("purple")
+ fuseRev2();
  fuseRailsRev2();
-/* color("cyan")*/rotate([0,(180-theta)*wantToPrint,0])motMntL(39);
- /*color("red")*/rotate([0,(180-theta)*wantToPrint,0])motMntU(30);
- UWingBrace2();
+ }
+ color("green")rotate([0,(180-theta)*wantToPrint,0])motMntL(39);
+ color("green")rotate([0,(180-theta)*wantToPrint,0])motMntU(30);
+ color("green")UWingBrace2();
+ color("green")teather();
  //wingL();
  //translate([wantToPrint*-100,wantToPrint*50,0])rotate([-UWXang*wantToPrint,0,0])wingU();
  //rotate([180*wantToPrint,0,0])UWingBrace(MT1=UWB_MT1,MT2=UWB_MT2,Hdia=UWB_Hdia,WBMO=UWB_MO);
  if(wantToPrint==0){
 	//motSpace(0)rotate([0,theta,0])translate([0,0,17.5+motP_MT])for(i=[0:2:360]) rotate([0,0,i])cube([PropD/2,0.1,0.2]);
 	//motSpace(1)rotate([0,theta,0])translate([0,0,17.5+motP_MT])for(i=[0:2:360]) rotate([0,0,i])cube([PropD/2,0.1,0.2]);
-    thecam();
+    //thecam();
     //translate([-90,-15,carbLWP[2]+FR[0]/2])cube([85,30,35]);//crude battery
     //%translate([-3.7,-18,carbLWP[2]+FR[0]/2+5])cube([36,36,20]);//crude stack
-    %translate([-33+fusehozoff,-17.5,carbLWP[2]+FR[0]/2])cube([85,35,30]);//crude battery
-    %translate([-71+fusehozoff,-18,carbLWP[2]+FR[0]/2+5])cube([36,36,20]);//crude stack
+    //%translate([-33+fusehozoff,-17.5,carbLWP[2]+FR[0]/2])cube([85,35,30]);//crude battery
+    //%translate([-71+fusehozoff,-18,carbLWP[2]+FR[0]/2+5])cube([36,36,20]);//crude stack
  }
 }
 
