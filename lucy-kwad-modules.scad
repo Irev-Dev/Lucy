@@ -382,19 +382,22 @@ module fuseRev2(shellT=6.5,tol_expand=0){
 		];				
 		tranZ(-tol_expand/2)linear_extrude(CarBT+tol_expand){
 			difference(){
-				offset(tol_expand)shellInwards2d(shellT,0,1.7)difference(){
-					union(){
-						polygon(polyRound(mirrorYpoints(fs_basePoints),20,0));
-					}
-					union(){
-						for(i=[0:1])mirror([0,i,0]){
-							polygon(polyRound(fs_postP,20,0));
-							if(shellT<99)translate(LWing_MMH)circle(d=motP_mntD);//don't include if shell i very large as it is being used to differnce from the motor mount and it causes trouble included
-							//translate([fusehozoff+l/2-fs_minT-FR_CuT-FR_BHD/2,w/2-CarRT/2])circle(d=3.2);
-							translate([l/2+fusehozoff-fs_minT-FR_CuT-FR_BHD/2/*+FR_BD/2*/,w/2-CarRT/2])circle(d=3.2);
-							for(i=[-70,-70/*20*/])translate([i,0,0])stackMountHoles();
+				offset(tol_expand)shellInwards2d(shellT,0,1.7){
+					difference(){
+						union(){
+							polygon(polyRound(mirrorYpoints(fs_basePoints),20,0));
+						}
+						union(){
+							for(i=[0:1])mirror([0,i,0]){
+								polygon(polyRound(fs_postP,20,0));
+								if(shellT<99)translate(LWing_MMH)circle(d=motP_mntD);//don't include if shell i very large as it is being used to differnce from the motor mount and it causes trouble included
+								//translate([fusehozoff+l/2-fs_minT-FR_CuT-FR_BHD/2,w/2-CarRT/2])circle(d=3.2);
+								translate([l/2+fusehozoff-fs_minT-FR_CuT-FR_BHD/2/*+FR_BD/2*/,w/2-CarRT/2])circle(d=3.2);
+								for(i=[-70,-70/*20*/])translate([i,0,0])stackMountHoles();
+							}
 						}
 					}
+					scale([1.2,1,1])translate([-8,0,0])gridpattern(4.5,sqrt(sq(fs[1]-12)/4),11);
 				}
 				//offset(2)offset(-8)polygon(polyRound(mirrorYpoints(fs_basePoints,20,0)));
 			}
@@ -576,8 +579,11 @@ module ringPart(thedia=120,theheight=40,thick1=4,thick2=5,leng=80,carT=4,slotD=8
 // handly modules, not of specific parts
 module shellInwards2d(off,OR,IR){
 	difference(){
-		children();
-		round2d(IR,OR)offset(-off)children();
+		children(0);
+		round2d(IR,OR)difference(){
+			offset(-off)children(0);
+			children(1);
+		}
 	}
 }
 module round2d(OR=3,IR=1){
@@ -596,6 +602,14 @@ module axis(size = 50){
         rotate([0,90,0])cylinder(h=size,d=0.5);
         translate([size,0,0])rotate([0,0,-90])text("X");
     }    
+}
+module gridpattern(memberW=4,sqW=12,iter=5){
+    rotate([0,0,45])translate([-(iter*(sqW+memberW)+memberW)/2,-(iter*(sqW+memberW)+memberW)/2])difference(){
+        square([(iter)*(sqW+memberW)+memberW,(iter)*(sqW+memberW)+memberW]);
+        for(i=[0:iter-1],j=[0:iter-1]){
+            translate([i*(sqW+memberW)+memberW,j*(sqW+memberW)+memberW])square([sqW,sqW]);
+        }
+    }
 }
 //COORDINATE SPACE MODULES
 module UpperWingMMHSpace(){
