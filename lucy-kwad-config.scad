@@ -279,11 +279,11 @@ LWing_MMH=round3points([LWing_MMP[2],[LWing_MMP[3][0],LWing_MMP[3][1],motP_mntD/
 wantToPrint=0; //0 for model, 1 to print parts
 rotate([0,0,0])for(i=[0,1])mirror([0,i,0]){
  //translate([fs[0]/2+fusehozoff,0,carbLWP[2]-carbW[2]/2])mirror([1,0,0])thefuselage(fuseHt=fs[2],frntDia=45,rearDia=70,RCT1 = CarRT,RCT2 = RCutT,BCT1 =CarBT,slotD=FR_SD[0],tol=FR_tol,totLength=fs[0],fuseW=fs[1],mergeR=[5,10],mergeT=3);
- color("grey"){
+ /*color("grey"){
  wingUrev2(6.2,0);
  fuseRev2();
  fuseRailsRev2();
- }
+ }*/
  color("green")rotate([0,(180-theta)*wantToPrint,0])motMntL(39);
  color("green")rotate([0,(180-theta)*wantToPrint,0])motMntU(30);
  color("green")UWingBrace2();
