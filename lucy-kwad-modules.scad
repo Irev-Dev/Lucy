@@ -23,105 +23,26 @@ module thecam(index=0){
     }
 }
 module stackMountHoles(holeD=3.2,holeS=30.5){
- //for(i=[0,90])rotate([0,0,i])translate([holeS/2,holeS/2,-10])cylinder(d=holeD,h=20); 
  for(i=[0,90])rotate([0,0,i])translate([holeS/2,holeS/2,-10])circle(d=holeD); 
 }
-module UWingBrace(MT1=2,MT2=3,Hdia=3.2,WBMO=[5,5]){//wingbracemountoffset
- //translate(carbUWP-[carbW[0]+carbW[3]*-0+0.1-0.5,0,0])rotate([-90+UWXang,0,0])rotate([0,-90+UWRYang,0])translate([0,-carbW[2]/2,0])cube([100,0.5,100]);
- //#translate(carbUWP-[carbW[0]*0-carbW[3]/2+0.1,0,0])rotate([-90+UWXang,0,0])rotate([0,-90+UWFYang,0])translate([0,-carbW[2]/2,0])cube([100,0.5,100]);
- difference([]){
-	union(){
-	 hull(){
-		braceMountSpace(3)cylinder(h=MT1,d=MT2+Hdia);
-		braceMountSpace(3)cube([MT2+Hdia,MT2,MT1]);
-		braceMountSpace(1)translate([-(MT2+Hdia)*1.5,0,0])cube([MT2+Hdia,MT2,MT1]);
-	 }
-	 hull(){
-		braceMountSpace(2)cylinder(h=MT1,d=MT2+Hdia);
-		braceMountSpace(0)translate([(MT2+Hdia)*1.5,0,0])cube([MT2+Hdia,MT2,MT1]);
-	 }
-	 
-	 hull(){
-		braceMountSpace(6)cylinder(h=MT1,d=MT2+Hdia);
-		braceMountSpace(2)cylinder(h=MT1,d=MT2+Hdia);
-		braceMountSpace(2)translate([-(MT2+Hdia)/2,-(MT2+Hdia)/2,0])cube([MT2+Hdia,MT2,MT1]);
-		braceMountSpace(6)translate([-(MT2+Hdia)/2,-MT2+(MT2+Hdia)/2,0])cube([MT2+Hdia,MT2,MT1]);
-	 }
-	 hull(){
-		braceMountSpace(3)cylinder(h=MT1,d=MT2+Hdia);
-		braceMountSpace(6)cylinder(h=MT1,d=MT2+Hdia);
-		braceMountSpace(3)translate([-(MT2+Hdia)/2,-(MT2+Hdia)/2,0])cube([MT2+Hdia,MT2,MT1]);
-		braceMountSpace(6)translate([-(MT2+Hdia)/2,-MT2+(MT2+Hdia)/2,0])cube([MT2+Hdia,MT2,MT1]);
-	 }
-	 hull(){
-		braceMountSpace(6)cylinder(h=UWB_minP,d=Hdia+MT2);
-		braceMountSpace(5)cylinder(h=UWB_minP,d=Hdia+MT2);
-	 }
-	 hull(){
-		braceMountSpace(6)cylinder(h=UWB_minP,d=Hdia+MT2);
-		braceMountSpace(4)cylinder(h=UWB_minP,d=Hdia+MT2);
-	 }
-	 hull(){
-		for(i=[0,1,5,4])braceMountSpace(i)cylinder(h=MT1,d=MT2+Hdia);
-		 braceMountSpace(1)translate([-(MT2+Hdia)*1.5,0,0])cube([MT2+Hdia,MT2,MT1]);
-		 braceMountSpace(0)translate([(MT2+Hdia)*1.5,0,0])cube([MT2+Hdia,MT2,MT1]);
-	 }
-	}
-	union(){
-        // base holes
-	 for(i=[1:6])braceMountSpace(i){// loop through different hole positings and remove material
-		translate([0,0,-MT1*4])cylinder(h=MT1*8,d=Hdia);
-		translate([0,0,MT1])cylinder(h=MT1*4,d=MT2+Hdia,$fn=UWB_HoS);
-	 }
-	 braceMountSpace(0){//The height of the hole being subtracted here is sensitive, which is why it's outside the above loop
-		translate([0,0,-MT1*4])cylinder(h=MT1*6,d=Hdia);
-		translate([0,0,MT1])cylinder(h=MT1*3,d=MT2+Hdia,$fn=UWB_HoS);
-	 }
-	 translate([-100,-1,carbLWP[2]+fs[2]-FR[0]/2/*-RCutT/2-UWB_Hdia/2+UWB_MT2/2*/])cube([200,200,100]);
-	}
- }
-}
-module wingU(){
- difference(){
-	hull(){
-			motSpace(1) translate(carbUWTO) rotate([UWXang,0,0])translate([-carbW[3],-carbW[3],-carbW[2]/2])cylinder(h=carbW[2],r=carbW[3]);
-			motSpace(1) translate(carbUWTO-[carbW[1],0,0]) rotate([UWXang,0,0])translate([+carbW[3],-carbW[3],-carbW[2]/2])cylinder(h=carbW[2],r=carbW[3]);
-			translate(carbUWP) rotate([UWXang,0,0])translate([-carbW[3],carbW[3],-carbW[2]/2])cylinder(h=carbW[2],r=carbW[3]);
-			translate(carbUWP-[carbW[0],0,0]) rotate([UWXang,0,0])translate([carbW[3],carbW[3],-carbW[2]/2])cylinder(h=carbW[2],r=carbW[3]);
-	}
-	union(){
-	 motSpace(1) translate(carbUWTO) rotate([UWXang,0,0])translate([-carbW[3]-carbWmin,-carbW[3]-carbWmin,-carbW[2]/2-motP_MT2*5])cylinder(h=carbW[2]+motP_MT2*10,d=motP_mntD);
-	 motSpace(1) translate(carbUWTO-[carbW[1],0,0]) rotate([UWXang,0,0])translate([carbW[3]+carbWmin,-carbW[3]-carbWmin,-carbW[2]/2-motP_MT2*5])cylinder(h=carbW[2]+motP_MT2*10,d=motP_mntD);
-	 for(i=[4:6])braceMountSpace(i){translate([0,0,-UWB_MT1*4])cylinder(h=UWB_MT1*8,d=UWB_Hdia);}
-	}
- }
-}
 module wingUrev2(shellT=6.2,tol_expand=0){
-	difference(){
-		union(){
-			UpperWingSpace()tranZ(-(carbW[2]+tol_expand)/2)linear_extrude(carbW[2]+tol_expand)offset(tol_expand)shellInwards2d(shellT,0,1)difference(){
-				polygon(polyRound(UWingRP,20,0));	
-				if(shellT<99){//don't include if shell i very large as it is being used to differnce from the motor mount and it causes trouble included
-					translate(UWing_MMH)circle(d=motP_mntD);
-					translate(UWing_FWMH)circle(d=motP_mntD);
-					translate(UWing_RWMH)circle(d=motP_mntD);
-					translate([UWing_TMHX,UWing_TMHY])circle(d=motP_mntD);
-					//#translate([5,5])circle(d=motP_mntD);
-				}
-			}
-		}
-		union(){
-			//UpperWingMMHSpace()tranZ(-25)cylinder(d=motP_mntD,h=50);
+	UpperWingSpace()tranZ(-(carbW[2]+tol_expand)/2)linear_extrude(carbW[2]+tol_expand)offset(tol_expand)shellInwards2d(shellT,0,1)difference(){//difference the mounting holes from the wing polygon, shell the result, extrude it and translate into position.
+		polygon(polyRound(UWingRP,20,0));//rounded wing polygon
+		if(shellT<99){//don't include if shell is very large as it is being used to differnce from the motor mount and it causes trouble when included in the difference
+			translate(UWing_MMH)circle(d=motP_mntD);//motor mount hole at the top of the wing
+			translate(UWing_FWMH)circle(d=motP_mntD);//bottom front mouting hole (coulpes the wing to the base)
+			translate(UWing_RWMH)circle(d=motP_mntD);//bottom rear mouting hole (coulpes the wing to the base)
+			translate([UWing_TMHX,UWing_TMHY])circle(d=motP_mntD);//teather mounting hole
 		}
 	}
 }
 module UWingBrace2(){
-	w=fs[1];
+	w=fs[1];// temp base width varible for use in polygons
 	UWB2_MT1=2;
 	UWing_BEC=[0,carbUWP[2]+sin(90-UWXang)*carbW[2]/2,			w/2+fs_ph+carbW[2]/2-cos(90-UWXang)*carbW[2]/2];//bottom edge coordinates
 	UWing_BEO=[0,-1*sin(UWXang),-1*cos(UWXang)];//bottom edge offset
 	UWing_BT=[0,UWing_BTO*sin(UWXang),UWing_BTO*cos(UWXang)];//brace tip
-	p=[
+	UWB_XEP=[// Upper Wing Brace X Extrude Points
 	[UWing_BEC.y+UWing_BT.y,			UWing_BEC.z+UWing_BT.z-3,2],
 	[UWing_BEC.y+UWing_BT.y,			UWing_BEC.z+UWing_BT.z,	0],
 	[UWing_BEC.y+UWing_BEO.y,			UWing_BEC.z+UWing_BEO.z,3],
@@ -131,9 +52,7 @@ module UWingBrace2(){
 	[carbLWP[2]+CarBT/2,				w/2-FR_CaT,				0],
 	[carbLWP[2]+CarBT/2+2,				w/2-FR_CaT,				1.5],
 	];
-	//fs_BPC
-	//fs_bhd
-	p2=[
+	UWB_ZEP=[// Upper Wing Brace Z Extrude Points
 	[carbUWP[0]+5,						w/2-FR_CaT,				0],
 	[carbUWP[0]+5,						w/2+30,					0],
 	[carbUWP[0]+5-carbW[0]*2,			w/2+30,					0],
@@ -143,103 +62,78 @@ module UWingBrace2(){
 	[fs_BPC+fs_bhd,						w/2-FR_CaT,				8],
 	];
 	difference(){
-		union(){
-			intersection(){
-				translate([carbUWP[0]+5,0,0])rotate([0,-90,0])linear_extrude(carbW[0]*2)polygon(polyRound(p,20,0));
-				tranZ(carbLWP[2]-20)linear_extrude(40)polygon(polyRound(p2,20,0));
-				UpperWingSpace()tranZ(-20)linear_extrude(40)polygon(polyRound(UWing_BP,20,0));
-			}
+		intersection(){
+			translate([carbUWP[0]+5,0,0])rotate([0,-90,0])linear_extrude(carbW[0]*2)polygon(polyRound(UWB_XEP,20,0)); //X Extrued
+			tranZ(carbLWP[2]-20)linear_extrude(40)polygon(polyRound(UWB_ZEP,20,0)); // Z Extrude
+			UpperWingSpace()tranZ(-20)linear_extrude(40)polygon(polyRound(UWing_BP,20,0)); // perpendictular to wing extrude
 		}
 		union(){
-			fuseRev2(100,0.2);
-			UpperWingSpace()tranZ(-25)translate(UWing_RWMH)cylinder(d=motP_mntD,h=50);
-			UpperWingSpace()tranZ(-25)translate(UWing_FWMH)cylinder(d=motP_mntD,h=50);
-			translate([fs_BPC,0,carbLWP[2]])rotate([-90,0,0])cylinder(d=motP_mntD,h=50);
+			fuseRev2(100,0.2); // Subtract the frame base (with very large shell thickness and expanded a small amount for tolerance)
+			UpperWingSpace()tranZ(-25)translate(UWing_RWMH)cylinder(d=motP_mntD,h=50); // Subtract rear wing mounting hole
+			UpperWingSpace()tranZ(-25)translate(UWing_FWMH)cylinder(d=motP_mntD,h=50); // Subtract front wing mounting hole
+			translate([fs_BPC,0,carbLWP[2]])rotate([-90,0,0])cylinder(d=motP_mntD,h=50); // Subtracte hole for mounting to the base
 		}
 	}
-}
-module wingL(){
- frntWang=abs(atan((mot_cords[0][1]+carbLWTO[1]-carbLWP[1])/(mot_cords[0][0]-carbLWP[0])));
- rearWang=abs(atan((mot_cords[0][1]+carbLWTO[1]-carbLWP[1])/(mot_cords[0][0]+carbLWTO[0]-carbW[1]-carbLWP[0]+carbW[0])));
- translate(carbLWP) rotate([LWXang,0,0])translate([-carbW[3],0,-carbW[2]/2])angR(ht=carbW[2],ang=frntWang+2,R=carbLWR[0]);
- translate(carbLWP-[carbW[0],0,0]) rotate([LWXang,0,0])translate([carbW[3],0,-carbW[2]/2])mirror([1,0,0,])angR(ht=carbW[2],ang=180-rearWang+0.5,R=carbLWR[1]);
- difference(){
- hull(){
-			motSpace(0) translate(carbLWTO) rotate([LWXang,0,0])translate([-carbW[3],-carbW[3],-carbW[2]/2])cylinder(h=carbW[2],r=carbW[3]);
-			motSpace(0) translate(carbLWTO-[carbW[1],0,0]) rotate([LWXang,0,0])translate([carbW[3],-carbW[3],-carbW[2]/2])cylinder(h=carbW[2],r=carbW[3]);
-			translate(carbLWP) rotate([LWXang,0,0])translate([-carbW[3],0,-carbW[2]/2])cylinder(h=carbW[2],r=0.01);
-			translate(carbLWP-[carbW[0],0,0]) rotate([LWXang,0,0])translate([carbW[3],0,-carbW[2]/2])cylinder(h=carbW[2],r=0.01);
-  }
-  union(){
-	 motSpace(0) translate(carbLWTO) rotate([LWXang,0,0])translate([-carbW[3]-carbWmin,-carbW[3]-carbWmin,-carbW[2]/2-motP_MT2*5])cylinder(h=carbW[2]+motP_MT2*10,d=motP_mntD);
-	 motSpace(0) translate(carbLWTO-[carbW[1],0,0]) rotate([LWXang,0,0])translate([carbW[3]+carbWmin,-carbW[3]-carbWmin,-carbW[2]/2-motP_MT2*5])cylinder(h=carbW[2]+motP_MT2*10,d=motP_mntD);
-  }
- }
 }
 module motMntU(Hrot=30){
 	difference(){
 		union(){
-			UpperWingSpace()tranZ(-carbW[2]/2-motP_MT2)linear_extrude(motP_MT2)offset(motP_MT2)polygon(polyRound(UWing_MMP,20,0));
-			hull(){
-				motSpace(1)rotate([0,theta,0]) cylinder(h=motP_MT,d=motP_dia);
-				for(i=[25,65])motSpace(1)rotate([0,theta,0])rotate([0,0,i])translate([0,motP_dia/2+motP_MG[1],0]) cylinder(h=motP_MT,d=motP_MG[0]);	
-				UpperWingSpace()tranZ(-carbW[2]/2-motP_MT2)linear_extrude(carbW[2]+motP_MT2*2)offset(motP_MT2)polygon(polyRound(UWing_MMPS,20,0));	
-				//motSpace(1) translate(carbUWTO) rotate([UWXang,0,0])translate([-carbW[3]-carbWmin,-carbW[3]-carbWmin,-carbW[2]/2-motP_MT2])cylinder(h=motP_MT2,r=motP_BR);
-				//motSpace(1) translate(carbUWTO-[carbW[1],0,0]) rotate([UWXang,0,0])translate([carbW[3]+carbWmin,-carbW[3]-carbWmin,-carbW[2]/2-motP_MT2])cylinder(h=motP_MT2,r=motP_BR);
+			UpperWingSpace()tranZ(-carbW[2]/2-motP_MT2)linear_extrude(motP_MT2)offset(motP_MT2)polygon(polyRound(UWing_MMP,20,0));//wing tip mounting hole polygon extrude
+			hull(){ //using hull here to effectively fill in the gap between where this mount attaches to the wing and where the motor mounts to this mount
+				//motSpace(1)rotate([0,theta,0]) cylinder(h=motP_MT,d=motP_dia);
+				motSpace(1)rotate([0,theta,0])rotate([0,0,Hrot])linear_extrude(motP_MT)offset(4)motMntHoles("2d");// offset and linearly extruded motor mount holes to form the top of motor mounts
+				for(i=[25,65])motSpace(1)rotate([0,theta,0])rotate([0,0,i])translate([0,motP_dia/2+motP_MG[1],0]) cylinder(h=motP_MT,d=motP_MG[0]);	//extent motor mount to help protect motor
+				UpperWingSpace()tranZ(-carbW[2]/2-motP_MT2)linear_extrude(carbW[2]+motP_MT2*2)offset(motP_MT2)polygon(polyRound(UWing_MMPS,20,0));	//wing tip mount
 			}	
-			//translate([0,carbUWP[1],carbUWP[2]])rotate([UWXang,0,0])translate([0,0,-4])linear_extrude(8)offset(2)polygon(polyRound(p,20,0));	
 		}
 		union(){
 			//slightly better than below but hard to print motSpace(1)rotate([0,theta,0]) translate([0,0,motP_MT])cylinder(h=motP_MT*2,d1=motP_dia*1.2,d2=motP_dia*1.2+motP_MT*10);
-			motSpace(1)rotate([0,theta,0]) translate([0,0,motP_MT])cylinder(h=motP_MT*2,d=motP_dia*5);
-			motSpace(1)rotate([0,theta,0])rotate([0,0,Hrot])motMntHoles();
+			motSpace(1)rotate([0,theta,0]) translate([0,0,motP_MT+0.01])cylinder(h=motP_MT*5,d=motP_dia*5);//large disk used to ensure the part is printable
+			motSpace(1)rotate([0,theta,0])translate([0,0,motP_MT-motP_CHD])cylinder(h=motP_CHD*3,d=motP_CHdia); // centre hole
+			motSpace(1)rotate([0,theta,0])rotate([0,0,Hrot])motMntHoles("3d"); // motor mount holes
+			wingUrev2(100,0.2); //Subtract the wing from this part, expanded a small amount for tolerance
 			UpperWingMMHSpace(){
-				tranZ(-25)cylinder(d=motP_mntD,h=50);
-				tranZ(motP_MT2/2+motP_WMHCS)cylinder(d1=motP_mntD,d2=motP_mntD+15,h=15);
-				tranZ(-motP_MT2-10)cylinder(d=motP_HD,h=10,$fn=motP_HoS);
-				}
-			//wingU();
-			//motSpace(1) translate(carbUWTO) rotate([UWXang,0,0])translate([-carbW[3]-carbWmin,-carbW[3]-carbWmin,-carbW[2]/2-motP_MT2*5])cylinder(h=carbW[2]+motP_MT2*10,d=motP_mntD);
-			//motSpace(1) translate(carbUWTO-[carbW[1],0,0]) rotate([UWXang,0,0])translate([carbW[3]+carbWmin,-carbW[3]-carbWmin,-carbW[2]/2-motP_MT2*5])cylinder(h=carbW[2]+motP_MT2*10,d=motP_mntD);
-			//motSpace(1) translate(carbUWTO) rotate([UWXang,0,0])translate([-carbW[3],-carbW[3],carbW[2]/2+motP_MT2-motP_WMFDp])cylinder(h=carbW[2]+motP_MT2*10,d=motP_WMFD,$fn=motP_WMFS);
-			//motSpace(1) translate(carbUWTO-[carbW[1],0,0]) rotate([UWXang,0,0])translate([carbW[3],-carbW[3],carbW[2]/2+motP_MT2-motP_WMFDp])cylinder(h=carbW[2]+motP_MT2*10,d=motP_WMFD,$fn=motP_WMFS);
-			//motSpace(1) translate(carbUWTO) rotate([UWXang,0,0])translate([-carbW[3]-carbWmin,-carbW[3]-carbWmin,-carbW[2]/2-motP_MT2*5])cylinder(h=motP_MT2*4,d=motP_WMHD);
-			//motSpace(1) translate(carbUWTO-[carbW[1],0,0]) rotate([UWXang,0,0])translate([carbW[3]+carbWmin,-carbW[3]-carbWmin,-carbW[2]/2-motP_MT2*5])cylinder(h=motP_MT2*4,d=motP_WMHD);
-			motSpace(1)rotate([0,theta,0])translate([0,0,motP_MT-motP_CHD])cylinder(h=motP_CHD*3,d=motP_CHdia);
-			wingUrev2(100,0.2);
-			//wingU();
+				tranZ(-25)cylinder(d=motP_mntD,h=50);// mounting hole for this part
+				//tranZ(motP_MT2/2+motP_WMHCS)cylinder(d1=motP_mntD,d2=motP_mntD+15,h=15); // counter sunk hole NOT USED CURRENTLY
+				tranZ(-motP_MT2-10)cylinder(d=motP_HD,h=10,$fn=motP_HoS); // hex or square hole or nut capture
+			}
 		}
 	}
 }
 module motMntL(Hrot=30){
- difference(){
-	union(){
-		tranZ(carbLWP[2]-carbW[2]/2-motP_MT2)linear_extrude(motP_MT2)offset(motP_MT2)polygon(polyRound(LWing_MMP,20,0));
-		hull(){
-		motSpace(0)rotate([0,theta,0]) cylinder(h=motP_MT,d=motP_dia);
-        for(i=[25,65])motSpace(0)rotate([0,theta,0])rotate([0,0,i])translate([motP_dia/2+motP_MG[1],0,0]) cylinder(h=motP_MT,d=motP_MG[0]);
-		tranZ(carbLWP[2]-carbW[2]/2-motP_MT2)linear_extrude(carbW[2]+motP_MT2*2)offset(motP_MT2)polygon(polyRound(LWing_MMPS,20,0));
-	 }
+	difference(){
+		union(){
+			tranZ(carbLWP[2]-carbW[2]/2-motP_MT2)linear_extrude(motP_MT2)offset(motP_MT2)polygon(polyRound(LWing_MMP,20,0));
+			hull(){
+				//motSpace(0)rotate([0,theta,0]) cylinder(h=motP_MT,d=motP_dia);
+				motSpace(0)rotate([0,theta,0])rotate([0,0,Hrot])linear_extrude(motP_MT)offset(4)motMntHoles(1);
+				for(i=[25,65])motSpace(0)rotate([0,theta,0])rotate([0,0,i])translate([motP_dia/2+motP_MG[1],0,0]) cylinder(h=motP_MT,d=motP_MG[0]);
+				tranZ(carbLWP[2]-carbW[2]/2-motP_MT2)linear_extrude(carbW[2]+motP_MT2*2)offset(motP_MT2)polygon(polyRound(LWing_MMPS,20,0));
+			}
+		}
+		union(){
+			motSpace(0)rotate([0,theta,0])rotate([0,0,Hrot])motMntHoles();
+			motSpace(0)rotate([0,theta,0]) tranZ(motP_MT)cylinder(h=motP_MT*5,d=motP_dia*10);
+			translate([LWing_MMH[0],LWing_MMH[1],carbLWP[2]-carbW[2]/2]){
+			tranZ(-25)cylinder(d=motP_mntD,h=50);
+			tranZ(motP_MT2+motP_WMHCS)cylinder(d1=motP_mntD,d2=motP_mntD+15,h=15);
+			tranZ(-motP_MT2-10)cylinder(d=motP_HD,h=10,$fn=motP_HoS);
+		 }
+		 motSpace(0)rotate([0,theta,0])translate([0,0,motP_MT-motP_CHD])cylinder(h=motP_CHD*3,d=motP_CHdia);
+		 fuseRev2(100,0.2);
+		}
 	}
-	union(){
-	 motSpace(0)rotate([0,theta,0])rotate([0,0,Hrot])motMntHoles();
-	 motSpace(0)rotate([0,theta,0]) tranZ(motP_MT)cylinder(h=motP_MT*5,d=motP_dia*10);
-	 translate([LWing_MMH[0],LWing_MMH[1],carbLWP[2]-carbW[2]/2]){
-		tranZ(-25)cylinder(d=motP_mntD,h=50);
-		tranZ(motP_MT2+motP_WMHCS)cylinder(d1=motP_mntD,d2=motP_mntD+15,h=15);
-		tranZ(-motP_MT2-10)cylinder(d=motP_HD,h=10,$fn=motP_HoS);
-	 }
-	 motSpace(0)rotate([0,theta,0])translate([0,0,motP_MT-motP_CHD])cylinder(h=motP_CHD*3,d=motP_CHdia);
-	 fuseRev2(100,0.2);
-	}
- }
 }
-module motMntHoles(){
+module motMntHoles(mode=0){
  coneht=tan(motP_CA)*(motP_CD-motP_mntD)/2;
- for(k=[[0,0],[90,2]])rotate([0,0,k[0]])for(j=[0,1])mirror([0,j,0]){
-	hull()for(i=[0,1])translate([0,motP_mntS[i+k[1]],0])translate([0,0,-0.1])cylinder(h=motP_MT*5+0.2,d=motP_mntD);
-	hull()for(i=[0,1])translate([0,motP_mntS[i+k[1]],-coneht])cylinder(h=coneht,d1=motP_CD,d2=motP_mntD);
-	hull()for(i=[0,1])translate([0,motP_mntS[i+k[1]],-coneht-100+0.01])cylinder(h=100,d=motP_CD);
+ for(k=[[0,0],[90,2]])rotate([0,0,k[0]])for(j=[0,1])mirror([0,j,0]){//this is hard to expain, maybe I should implement this again in a more intuitive way ¯\(°_o)/¯
+	if(mode==0||mode=="3d"){// 3d motor mount holes with counter sunk section
+		hull()for(i=[0,1])translate([0,motP_mntS[i+k[1]],0])translate([0,0,-0.1])cylinder(h=motP_MT*5+0.2,d=motP_mntD); //hulling two cylinders to form a elongated hole
+		hull()for(i=[0,1])translate([0,motP_mntS[i+k[1]],-coneht])cylinder(h=coneht,d1=motP_CD,d2=motP_mntD);//done again with a cone for the counter sunch section
+		hull()for(i=[0,1])translate([0,motP_mntS[i+k[1]],-coneht-100+0.01])cylinder(h=100,d=motP_CD);// and again for the bolt head
+	} else{//2d motor mount holes
+		hull()for(i=[0,1])translate([0,motP_mntS[i+k[1]],0])translate([0,0,-0.1])circle(d=motP_mntD); //hulling two cylinders to form a elongated oval thing
+	}
  }
 }
 module motMnts(){
@@ -365,13 +259,182 @@ module teather(){
 		}
 	}
 }
+// handly modules, not of specific parts
+module shellInwards2d(off,OR,IR){
+	difference(){
+		children(0);//original 1st child forms the outside of the shell
+		round2d(IR,OR)difference(){//round the inside cutout
+			offset(-off)children(0);//shrink the 1st child to form the inside of the shell 
+			if($children>1)children(1);//second child is used to add material to inside of the shell
+		}
+	}
+}
+module round2d(OR=3,IR=1){
+    offset(OR)offset(-IR-OR)offset(IR)children();
+}
+module axis(size = 50){    
+    color("blue"){
+        cylinder(h=size,d=0.5);
+        translate([0,0,size])rotate([90,0,0])text("Z");
+    }
+    color("green"){
+        rotate([-90,0,0])cylinder(h=size,d=0.5);
+        translate([0,size,0])text("Y");
+    }
+    color("red"){
+        rotate([0,90,0])cylinder(h=size,d=0.5);
+        translate([size,0,0])rotate([0,0,-90])text("X");
+    }    
+}
+module gridpattern(memberW=4,sqW=12,iter=5,r=3){
+    round2d(0,r)rotate([0,0,45])translate([-(iter*(sqW+memberW)+memberW)/2,-(iter*(sqW+memberW)+memberW)/2])difference(){
+        square([(iter)*(sqW+memberW)+memberW,(iter)*(sqW+memberW)+memberW]);
+        for(i=[0:iter-1],j=[0:iter-1]){
+            translate([i*(sqW+memberW)+memberW,j*(sqW+memberW)+memberW])square([sqW,sqW]);
+        }
+    }
+}
+//COORDINATE SPACE MODULES
+module UpperWingMMHSpace(){
+	UpperWingSpace()translate(UWing_MMH)children();
+}
+module UpperWingSpace(){
+	translate([0,carbUWP[1],carbUWP[2]])rotate([UWXang,0,0])children();
+}
+module tranZ(offset){
+	translate([0,0,offset])children();
+}
+module motSpace(lowOrUp = 0){
+    if(lowOrUp>1){
+		echo("motSpace() index out of range");
+	}else{
+    translate([mot_cords[lowOrUp][0],mot_cords[lowOrUp][1],mot_cords[lowOrUp][2]])children();}
+}
+module braceMountSpace(holeIndex = 0){
+    if(holeIndex==0){//front fuselage base mount
+        translate([carbUWP[0]-UWB_MT2/2-UWB_Hdia,fs[1]/2-UWB_MT2/2-UWB_Hdia/2,carbLWP[2]+FR[0]/2]){children();}
+    } else if(holeIndex==1){//rear fuselage base mount
+        translate([carbUWP[0]-carbW[0]+UWB_MT2/2+UWB_Hdia/2,fs[1]/2-UWB_MT2/2-UWB_Hdia/2,carbLWP[2]+FR[0]/2]){children();}
+    } else if(holeIndex==2){//front rail mount
+        translate([carbUWP[0],fs[1]/2,carbLWP[2]])rotate([0,UWFYang-90,0])translate([0,0,(fs[2]-FR[0]/2-RCutT/2)/cos(90-UWFYang)])rotate([0,-UWFYang+90,0])rotate([-90,0,0]){children();}
+    } else if(holeIndex==3){//rear rail mount
+        translate([carbUWP[0]-carbW[0],fs[1]/2,carbLWP[2]])rotate([0,UWRYang-90,0])translate([0,0,(fs[2]-FR[0]/2-RCutT/2)/cos(90-UWRYang)])rotate([0,-UWRYang+90,0])rotate([-90,0,0]){children();}
+    } else if(holeIndex==4){//front wing base mount
+        translate(carbUWP-[-carbW[3]/2+UWB_MO[0]*1.3,0,0])rotate([-90+UWXang,0,0])rotate([0,-90+UWFYang,0])translate([0,-carbW[2]/2,(UWB_MT2+UWB_Hdia+UWB_MO[1])/(2*cos(90-UWFYang)*cos(90-UWXang))])rotate([90,0,0]){children();}
+    } else if(holeIndex==5){//rear wing base mount
+        translate(carbUWP-[carbW[0]+carbW[3]*0-UWB_MO[0],0,0])rotate([-90+UWXang,0,0])rotate([0,-90+UWRYang,0])translate([0,-carbW[2]/2,(UWB_MT2+UWB_Hdia+UWB_MO[1])/(2*cos(90-UWRYang)*cos(90-UWXang))])rotate([90,0,0]){children();}
+    } else if(holeIndex==6){//top centre wing mount
+        //translate(carbUWP-[carbW[0]/2+carbW[3]*-0+0.1-0.5,0,0])rotate([-90+UWXang,0,0])rotate([0,-90+(UWRYang+UWRYang)/2,0])translate([0,-carbW[2]/2,(fs[2]-(UWB_MT2*2+UWB_Hdia*2+RCutT)/2-UWB_MO[1])/(cos(90-UWRYang)*cos(90-UWXang))])rotate([0,90-(UWRYang+UWRYang)/2,0])rotate([90,0,0]){children();}
+		    translate(carbUWP-[carbW[0]/2+carbW[3]*-0+0.1-0.5,0,0])rotate([-90+UWXang,0,0])rotate([0,-90+(UWRYang+UWRYang)/2,0])translate([0,-carbW[2]/2,(-UWB_MO[1]+fs[2]-FR[0]-RCutT/2)/(cos(90-UWRYang)*cos(90-UWXang))])rotate([0,90-(UWRYang+UWRYang)/2,0])rotate([90,0,0]){children();}
+		    //(fs[2]-FR[0]/2-RCutT/2-UWB_Hdia)
+    } else{echo("braceMountSpace() index out of range");}
+}
+//FUNCTIONS
+function getRearOffset(dia,ht,BCT1,RCT2)=
+ let(newht=ht-(dia>ht*1.5?BCT1+RCT2:(BCT1-RCT2)/2))
+ dia>ht*2?0:dia/2-(sqrt(abs((dia/2)*(dia/2)-((-dia/2+newht)*(-dia/2+newht)))));
+
+function getOffset(dia,ht,BCT1,RCT2)=
+ let(newht=ht-(dia>ht*1.5?BCT1+RCT2:(BCT1-RCT2)/2))
+ dia>ht*2?0:dia/2-(sqrt(abs((dia/2)*(dia/2)-((-dia/2+newht)*(-dia/2+newht)))));
+ 
+function mirrorYpoints(a)=
+ let(temp=[for(i=[2:len(a)-1]) [a[len(a)-i][0],a[len(a)-i][1]*-1,a[len(a)-i][2]]])
+ concat(a,temp);
+
+function interpX(p0,p1,theY)=//outputs linearly interpolated X value for a given Y.
+	p0.x+(theY-p0.y)*(p1.x-p0.x)/(p1.y-p0.y);
+// Old modules, will probably delete sooner or later
+module UWingBrace(MT1=2,MT2=3,Hdia=3.2,WBMO=[5,5]){//wingbracemountoffset
+ //translate(carbUWP-[carbW[0]+carbW[3]*-0+0.1-0.5,0,0])rotate([-90+UWXang,0,0])rotate([0,-90+UWRYang,0])translate([0,-carbW[2]/2,0])cube([100,0.5,100]);
+ //#translate(carbUWP-[carbW[0]*0-carbW[3]/2+0.1,0,0])rotate([-90+UWXang,0,0])rotate([0,-90+UWFYang,0])translate([0,-carbW[2]/2,0])cube([100,0.5,100]);
+ difference([]){
+	union(){
+	 hull(){
+		braceMountSpace(3)cylinder(h=MT1,d=MT2+Hdia);
+		braceMountSpace(3)cube([MT2+Hdia,MT2,MT1]);
+		braceMountSpace(1)translate([-(MT2+Hdia)*1.5,0,0])cube([MT2+Hdia,MT2,MT1]);
+	 }
+	 hull(){
+		braceMountSpace(2)cylinder(h=MT1,d=MT2+Hdia);
+		braceMountSpace(0)translate([(MT2+Hdia)*1.5,0,0])cube([MT2+Hdia,MT2,MT1]);
+	 }
+	 
+	 hull(){
+		braceMountSpace(6)cylinder(h=MT1,d=MT2+Hdia);
+		braceMountSpace(2)cylinder(h=MT1,d=MT2+Hdia);
+		braceMountSpace(2)translate([-(MT2+Hdia)/2,-(MT2+Hdia)/2,0])cube([MT2+Hdia,MT2,MT1]);
+		braceMountSpace(6)translate([-(MT2+Hdia)/2,-MT2+(MT2+Hdia)/2,0])cube([MT2+Hdia,MT2,MT1]);
+	 }
+	 hull(){
+		braceMountSpace(3)cylinder(h=MT1,d=MT2+Hdia);
+		braceMountSpace(6)cylinder(h=MT1,d=MT2+Hdia);
+		braceMountSpace(3)translate([-(MT2+Hdia)/2,-(MT2+Hdia)/2,0])cube([MT2+Hdia,MT2,MT1]);
+		braceMountSpace(6)translate([-(MT2+Hdia)/2,-MT2+(MT2+Hdia)/2,0])cube([MT2+Hdia,MT2,MT1]);
+	 }
+	 hull(){
+		braceMountSpace(6)cylinder(h=UWB_minP,d=Hdia+MT2);
+		braceMountSpace(5)cylinder(h=UWB_minP,d=Hdia+MT2);
+	 }
+	 hull(){
+		braceMountSpace(6)cylinder(h=UWB_minP,d=Hdia+MT2);
+		braceMountSpace(4)cylinder(h=UWB_minP,d=Hdia+MT2);
+	 }
+	 hull(){
+		for(i=[0,1,5,4])braceMountSpace(i)cylinder(h=MT1,d=MT2+Hdia);
+		 braceMountSpace(1)translate([-(MT2+Hdia)*1.5,0,0])cube([MT2+Hdia,MT2,MT1]);
+		 braceMountSpace(0)translate([(MT2+Hdia)*1.5,0,0])cube([MT2+Hdia,MT2,MT1]);
+	 }
+	}
+	union(){
+        // base holes
+	 for(i=[1:6])braceMountSpace(i){// loop through different hole positings and remove material
+		translate([0,0,-MT1*4])cylinder(h=MT1*8,d=Hdia);
+		translate([0,0,MT1])cylinder(h=MT1*4,d=MT2+Hdia,$fn=UWB_HoS);
+	 }
+	 braceMountSpace(0){//The height of the hole being subtracted here is sensitive, which is why it's outside the above loop
+		translate([0,0,-MT1*4])cylinder(h=MT1*6,d=Hdia);
+		translate([0,0,MT1])cylinder(h=MT1*3,d=MT2+Hdia,$fn=UWB_HoS);
+	 }
+	 translate([-100,-1,carbLWP[2]+fs[2]-FR[0]/2/*-RCutT/2-UWB_Hdia/2+UWB_MT2/2*/])cube([200,200,100]);
+	}
+ }
+}
+module wingU(){
+ difference(){
+	hull(){
+			motSpace(1) translate(carbUWTO) rotate([UWXang,0,0])translate([-carbW[3],-carbW[3],-carbW[2]/2])cylinder(h=carbW[2],r=carbW[3]);
+			motSpace(1) translate(carbUWTO-[carbW[1],0,0]) rotate([UWXang,0,0])translate([+carbW[3],-carbW[3],-carbW[2]/2])cylinder(h=carbW[2],r=carbW[3]);
+			translate(carbUWP) rotate([UWXang,0,0])translate([-carbW[3],carbW[3],-carbW[2]/2])cylinder(h=carbW[2],r=carbW[3]);
+			translate(carbUWP-[carbW[0],0,0]) rotate([UWXang,0,0])translate([carbW[3],carbW[3],-carbW[2]/2])cylinder(h=carbW[2],r=carbW[3]);
+	}
+	union(){
+	 motSpace(1) translate(carbUWTO) rotate([UWXang,0,0])translate([-carbW[3]-carbWmin,-carbW[3]-carbWmin,-carbW[2]/2-motP_MT2*5])cylinder(h=carbW[2]+motP_MT2*10,d=motP_mntD);
+	 motSpace(1) translate(carbUWTO-[carbW[1],0,0]) rotate([UWXang,0,0])translate([carbW[3]+carbWmin,-carbW[3]-carbWmin,-carbW[2]/2-motP_MT2*5])cylinder(h=carbW[2]+motP_MT2*10,d=motP_mntD);
+	 for(i=[4:6])braceMountSpace(i){translate([0,0,-UWB_MT1*4])cylinder(h=UWB_MT1*8,d=UWB_Hdia);}
+	}
+ }
+}
+module wingL(){
+ frntWang=abs(atan((mot_cords[0][1]+carbLWTO[1]-carbLWP[1])/(mot_cords[0][0]-carbLWP[0])));
+ rearWang=abs(atan((mot_cords[0][1]+carbLWTO[1]-carbLWP[1])/(mot_cords[0][0]+carbLWTO[0]-carbW[1]-carbLWP[0]+carbW[0])));
+ translate(carbLWP) rotate([LWXang,0,0])translate([-carbW[3],0,-carbW[2]/2])angR(ht=carbW[2],ang=frntWang+2,R=carbLWR[0]);
+ translate(carbLWP-[carbW[0],0,0]) rotate([LWXang,0,0])translate([carbW[3],0,-carbW[2]/2])mirror([1,0,0,])angR(ht=carbW[2],ang=180-rearWang+0.5,R=carbLWR[1]);
+ difference(){
+ hull(){
+			motSpace(0) translate(carbLWTO) rotate([LWXang,0,0])translate([-carbW[3],-carbW[3],-carbW[2]/2])cylinder(h=carbW[2],r=carbW[3]);
+			motSpace(0) translate(carbLWTO-[carbW[1],0,0]) rotate([LWXang,0,0])translate([carbW[3],-carbW[3],-carbW[2]/2])cylinder(h=carbW[2],r=carbW[3]);
+			translate(carbLWP) rotate([LWXang,0,0])translate([-carbW[3],0,-carbW[2]/2])cylinder(h=carbW[2],r=0.01);
+			translate(carbLWP-[carbW[0],0,0]) rotate([LWXang,0,0])translate([carbW[3],0,-carbW[2]/2])cylinder(h=carbW[2],r=0.01);
+  }
+  union(){
+	 motSpace(0) translate(carbLWTO) rotate([LWXang,0,0])translate([-carbW[3]-carbWmin,-carbW[3]-carbWmin,-carbW[2]/2-motP_MT2*5])cylinder(h=carbW[2]+motP_MT2*10,d=motP_mntD);
+	 motSpace(0) translate(carbLWTO-[carbW[1],0,0]) rotate([LWXang,0,0])translate([carbW[3]+carbWmin,-carbW[3]-carbWmin,-carbW[2]/2-motP_MT2*5])cylinder(h=carbW[2]+motP_MT2*10,d=motP_mntD);
+  }
+ }
+}
 module fuseRev2(shellT=6.5,tol_expand=0){
     tranZ(carbLWP[2]-carbW[2]/2){
-		/*hull(){
-			translate([carbLWP[0]-carbW[0],fs[1]/2,0])cylinder(h=6,d=1);
-			translate([mot_cords[0][0]+carbLWTO[0]-carbW[1],mot_cords[0][1]+carbLWTO[1],0])cylinder(h=6,d=1);
-		}*/
-		
 		fs_postP=[
 [fusehozoff+l/2-fs_minT+fs_mir,			w/2+FR_tol/2,		fs_mir],
 //[fusehozoff+l/2-fs_minT,				w/2-CarRT/2-FR_tol/4,0],
@@ -382,7 +445,7 @@ module fuseRev2(shellT=6.5,tol_expand=0){
 		];				
 		tranZ(-tol_expand/2)linear_extrude(CarBT+tol_expand){
 			difference(){
-				offset(tol_expand)shellInwards2d(shellT,0,1.7){
+				offset(tol_expand)shellInwards2d(shellT,0,1.2){
 					difference(){
 						union(){
 							polygon(polyRound(mirrorYpoints(fs_basePoints),20,0));
@@ -397,9 +460,8 @@ module fuseRev2(shellT=6.5,tol_expand=0){
 							}
 						}
 					}
-					scale([1.2,1,1])translate([-8,0,0])gridpattern(4.5,sqrt(sq(fs[1]-12)/4),11);
+					scale([1.2,1,1])translate([0,0,0])gridpattern(4.5,sqrt(sq(fs[1]-12)/4),11,3);
 				}
-				//offset(2)offset(-8)polygon(polyRound(mirrorYpoints(fs_basePoints,20,0)));
 			}
 		}
 	}
@@ -445,26 +507,6 @@ slotD=6,tol=0.1,totLength=150,fuseW=40,mergeR=[5,10],boltD=3.2,mergeT=3){
         
 	 }
 	}
- }
-}
-module Rmerge(ht=3,dp=3,ang=30,R1=3,R2=3){
- difference(){
-	union(){
-	 translate([0,dp-R1,0])cylinder(h=ht,r=R1);
-	 translate([0,dp-R1,0])rotate([0,0,-ang])translate([0,-dp+R1,0])cube([(dp-R1)/tan(ang)+R1/sin(ang),dp,ht]);
-	 translate([(dp-R1)/tan(ang)+R1/sin(ang),0,0])angR(ht=ht,ang=180-ang,R=R2);
-	}
-	union(){
-	 translate([-R1,-R1*2-dp,-0.1])cube([(dp-R1)/tan(ang)+R1/sin(ang)+R1*2+R2+2,R1*2+dp,ht+0.2]);
-	 translate([-R1,0,-0.1])cube([R1,R1+dp,ht+0.2]);
-	}
- }
-}
-module angR(ht=3,ang=120,R=3){
- difference(){
-	hull()for(i=[0,ang])rotate([0,0,i])cube([R/tan(ang/2),0.001,ht]);
-	translate([R/tan(ang/2),R,-0.1])cylinder(h=ht+0.2,r=R);
-	
  }
 }
 module fuseSlot(rearDia,fuseHt,BCT1,RCT2,slotD,totLength,fuseW,RCT1){
@@ -576,88 +618,23 @@ module ringPart(thedia=120,theheight=40,thick1=4,thick2=5,leng=80,carT=4,slotD=8
         }
     }
 }
-// handly modules, not of specific parts
-module shellInwards2d(off,OR,IR){
-	difference(){
-		children(0);
-		round2d(IR,OR)difference(){
-			offset(-off)children(0);
-			children(1);
-		}
+module Rmerge(ht=3,dp=3,ang=30,R1=3,R2=3){
+ difference(){
+	union(){
+	 translate([0,dp-R1,0])cylinder(h=ht,r=R1);
+	 translate([0,dp-R1,0])rotate([0,0,-ang])translate([0,-dp+R1,0])cube([(dp-R1)/tan(ang)+R1/sin(ang),dp,ht]);
+	 translate([(dp-R1)/tan(ang)+R1/sin(ang),0,0])angR(ht=ht,ang=180-ang,R=R2);
 	}
+	union(){
+	 translate([-R1,-R1*2-dp,-0.1])cube([(dp-R1)/tan(ang)+R1/sin(ang)+R1*2+R2+2,R1*2+dp,ht+0.2]);
+	 translate([-R1,0,-0.1])cube([R1,R1+dp,ht+0.2]);
+	}
+ }
 }
-module round2d(OR=3,IR=1){
-    offset(OR)offset(-IR-OR)offset(IR)children();
+module angR(ht=3,ang=120,R=3){
+ difference(){
+	hull()for(i=[0,ang])rotate([0,0,i])cube([R/tan(ang/2),0.001,ht]);
+	translate([R/tan(ang/2),R,-0.1])cylinder(h=ht+0.2,r=R);
+	
+ }
 }
-module axis(size = 50){    
-    color("blue"){
-        cylinder(h=size,d=0.5);
-        translate([0,0,size])rotate([90,0,0])text("Z");
-    }
-    color("green"){
-        rotate([-90,0,0])cylinder(h=size,d=0.5);
-        translate([0,size,0])text("Y");
-    }
-    color("red"){
-        rotate([0,90,0])cylinder(h=size,d=0.5);
-        translate([size,0,0])rotate([0,0,-90])text("X");
-    }    
-}
-module gridpattern(memberW=4,sqW=12,iter=5){
-    rotate([0,0,45])translate([-(iter*(sqW+memberW)+memberW)/2,-(iter*(sqW+memberW)+memberW)/2])difference(){
-        square([(iter)*(sqW+memberW)+memberW,(iter)*(sqW+memberW)+memberW]);
-        for(i=[0:iter-1],j=[0:iter-1]){
-            translate([i*(sqW+memberW)+memberW,j*(sqW+memberW)+memberW])square([sqW,sqW]);
-        }
-    }
-}
-//COORDINATE SPACE MODULES
-module UpperWingMMHSpace(){
-	UpperWingSpace()translate(UWing_MMH)children();
-}
-module UpperWingSpace(){
-	translate([0,carbUWP[1],carbUWP[2]])rotate([UWXang,0,0])children();
-}
-module tranZ(offset){
-	translate([0,0,offset])children();
-}
-module motSpace(lowOrUp = 0){
-    if(lowOrUp>1){
-		echo("motSpace() index out of range");
-	}else{
-    translate([mot_cords[lowOrUp][0],mot_cords[lowOrUp][1],mot_cords[lowOrUp][2]])children();}
-}
-module braceMountSpace(holeIndex = 0){
-    if(holeIndex==0){//front fuselage base mount
-        translate([carbUWP[0]-UWB_MT2/2-UWB_Hdia,fs[1]/2-UWB_MT2/2-UWB_Hdia/2,carbLWP[2]+FR[0]/2]){children();}
-    } else if(holeIndex==1){//rear fuselage base mount
-        translate([carbUWP[0]-carbW[0]+UWB_MT2/2+UWB_Hdia/2,fs[1]/2-UWB_MT2/2-UWB_Hdia/2,carbLWP[2]+FR[0]/2]){children();}
-    } else if(holeIndex==2){//front rail mount
-        translate([carbUWP[0],fs[1]/2,carbLWP[2]])rotate([0,UWFYang-90,0])translate([0,0,(fs[2]-FR[0]/2-RCutT/2)/cos(90-UWFYang)])rotate([0,-UWFYang+90,0])rotate([-90,0,0]){children();}
-    } else if(holeIndex==3){//rear rail mount
-        translate([carbUWP[0]-carbW[0],fs[1]/2,carbLWP[2]])rotate([0,UWRYang-90,0])translate([0,0,(fs[2]-FR[0]/2-RCutT/2)/cos(90-UWRYang)])rotate([0,-UWRYang+90,0])rotate([-90,0,0]){children();}
-    } else if(holeIndex==4){//front wing base mount
-        translate(carbUWP-[-carbW[3]/2+UWB_MO[0]*1.3,0,0])rotate([-90+UWXang,0,0])rotate([0,-90+UWFYang,0])translate([0,-carbW[2]/2,(UWB_MT2+UWB_Hdia+UWB_MO[1])/(2*cos(90-UWFYang)*cos(90-UWXang))])rotate([90,0,0]){children();}
-    } else if(holeIndex==5){//rear wing base mount
-        translate(carbUWP-[carbW[0]+carbW[3]*0-UWB_MO[0],0,0])rotate([-90+UWXang,0,0])rotate([0,-90+UWRYang,0])translate([0,-carbW[2]/2,(UWB_MT2+UWB_Hdia+UWB_MO[1])/(2*cos(90-UWRYang)*cos(90-UWXang))])rotate([90,0,0]){children();}
-    } else if(holeIndex==6){//top centre wing mount
-        //translate(carbUWP-[carbW[0]/2+carbW[3]*-0+0.1-0.5,0,0])rotate([-90+UWXang,0,0])rotate([0,-90+(UWRYang+UWRYang)/2,0])translate([0,-carbW[2]/2,(fs[2]-(UWB_MT2*2+UWB_Hdia*2+RCutT)/2-UWB_MO[1])/(cos(90-UWRYang)*cos(90-UWXang))])rotate([0,90-(UWRYang+UWRYang)/2,0])rotate([90,0,0]){children();}
-		    translate(carbUWP-[carbW[0]/2+carbW[3]*-0+0.1-0.5,0,0])rotate([-90+UWXang,0,0])rotate([0,-90+(UWRYang+UWRYang)/2,0])translate([0,-carbW[2]/2,(-UWB_MO[1]+fs[2]-FR[0]-RCutT/2)/(cos(90-UWRYang)*cos(90-UWXang))])rotate([0,90-(UWRYang+UWRYang)/2,0])rotate([90,0,0]){children();}
-		    //(fs[2]-FR[0]/2-RCutT/2-UWB_Hdia)
-    } else{echo("braceMountSpace() index out of range");}
-}
-//FUNCTIONS
-function getRearOffset(dia,ht,BCT1,RCT2)=
- let(newht=ht-(dia>ht*1.5?BCT1+RCT2:(BCT1-RCT2)/2))
- dia>ht*2?0:dia/2-(sqrt(abs((dia/2)*(dia/2)-((-dia/2+newht)*(-dia/2+newht)))));
-
-function getOffset(dia,ht,BCT1,RCT2)=
- let(newht=ht-(dia>ht*1.5?BCT1+RCT2:(BCT1-RCT2)/2))
- dia>ht*2?0:dia/2-(sqrt(abs((dia/2)*(dia/2)-((-dia/2+newht)*(-dia/2+newht)))));
- 
-function mirrorYpoints(a)=
- let(temp=[for(i=[2:len(a)-1]) [a[len(a)-i][0],a[len(a)-i][1]*-1,a[len(a)-i][2]]])
- concat(a,temp);
-
-function interpX(p0,p1,theY)=//outputs linearly interpolated X value for a given Y.
-	p0.x+(theY-p0.y)*(p1.x-p0.x)/(p1.y-p0.y);
