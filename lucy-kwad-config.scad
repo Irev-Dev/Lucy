@@ -7,7 +7,23 @@ include <polyround.scad>
 //VARIABLES//
 PropD=5*25.4;//propsize inch
 $fn=20;
-mot_s = [PropD+8,PropD+40,100,PropD+12]; //[x,yforLowMots,Z,YforUpMots]
+mot_s = [PropD+8,PropD+40,100,PropD+5]; //[x,yforLowMots,Z,YforUpMots]
+dem=max(mot_s[0],mot_s[1],mot_s[3]);
+/*
+mmix [motor number] [throttle] [roll] [pitch] [yaw]
+mmix 1 1.000 -1.000 1.000 -1.000 (Rear Right motor)
+mmix 2 1.000 -1.000 -1.000  1.000 (Front Right motor)
+mmix 3 1.000 1.000 1.000 1.000 (Rear Left motor)
+mmix 4 1.000 1.000 -1.000 -1.000 (Front Left motor)
+*/
+uroll=mot_s[3]/dem;//upper roll
+lroll=mot_s[1]/dem;//lower roll
+pitch=mot_s[0]/dem;// pitch
+echo("mmix 1 1.000",-uroll,pitch,"-1.000");
+echo("mmix 2 1.000",-lroll,-pitch,"1.000");
+echo("mmix 3 1.000",uroll,pitch,"-1.000");
+echo("mmix 3 1.000",lroll,-pitch,"1.000");
+
 theta = 70;
 motP_MT = 3;//material thickness
 motP_MT2=3;
@@ -115,7 +131,7 @@ carbLWTO = [-5,-3,15]; //lower wing tip offset [x,y,z]
 carbLWR=[10,20];//lower wing radius [front,rear]
 carbLWP=[25,fs[1]/2,mot_cords[0][2]+carbLWTO[2]]; //lower wing placement [x,y,z]
 carbUWP=[-18,(fs[1]+carbW[2])/2+fs_ph,carbLWP[2]+UWB_MO[1]]; //lower wing placement [x,y,z]
-carbUWTO = [-5,-12,0]; //lower wing tip offset [x,y,z]
+carbUWTO = [-5,-12,-5]; //lower wing tip offset [x,y,z]
 
 FR_RHP=[-fs[0]/2+fusehozoff+FR_SD[0]-FR_CuT+fs[2]*tan(FR_RA)+11,fs[2]-FR_CuT/2];//Rear hole placement, todo hardnum curently offset from the corrner of the rail by an abitary amount, ideally the hole should be placed just behind the wing so that it is still accessible with a allan key
 
@@ -127,7 +143,7 @@ UWXang = atan((mot_cords[1][2]+carbUWTO[2]-carbUWP[2])/(mot_cords[1][1]+carbUWTO
 diagonalMotDis=sqrt(mot_s[0]*mot_s[0]+(mot_s[1]+mot_s[3])/2*(mot_s[1]+mot_s[3])/2);
 echo("diagonal motor distance=",diagonalMotDis,"mm");
 
-TeMT=3;//Min thickness
+TeMT=3;//tether Min thickness
 
 //Upper wing Y length
 UWYlen=pointDist([carbUWP[1],carbUWP[2]],[mot_cords[1][1]+carbUWTO[1],mot_cords[1][2]+carbUWTO[2]]);
@@ -147,10 +163,11 @@ UWing_MFBMSY=UWingRP[1].y-5;//motor front bottom mount small Y
 UWing_MFBMX=interpX([UWingRP[0].x,UWingRP[0].y],[UWingRP[1].x,UWingRP[1].y],UWing_MFBMY);//motor front bottom mount X
 UWing_MRBMX=interpX([UWingRP[3].x,UWingRP[3].y],[UWingRP[2].x,UWingRP[2].y],UWing_MRBMY);//motor rear bottom mount X
 UWing_MFBMSX=interpX([UWingRP[0].x,UWingRP[0].y],[UWingRP[1].x,UWingRP[1].y],UWing_MFBMSY);//motor front bottom mount small X
+UWing_XMHO=-carbWmin*3/cos(90-getAngle(UWingRP[0],UWingRP[1]));//X mount hole offset
 UWing_MMP=[//motor mount points
-	[UWing_MFBMX-5,		UWing_MFBMY,		0],
-	[UWing_MFBMX,		UWing_MFBMY,		0],
-	UWingRP[1],
+	//[UWing_MFBMX-6,		UWing_MFBMY,		0],
+	[UWing_MFBMX+UWing_XMHO,		UWing_MFBMY,		1],
+	UWingRP[1]+[-carbUWTO.x,0,0],
 	UWingRP[2],
 	[UWing_MRBMX,		UWing_MRBMY,	0]
 ];
@@ -162,8 +179,8 @@ UWing_MMPS=[//motor mount points small
 	[UWing_MRBMX,		UWing_MRBMY,	0]
 ];
 UWing_BTO=11;
-UWing_XMHO=-carbWmin/cos(90-getAngle(UWingRP[0],UWingRP[1]));//X mount hole offset
-UWing_MMH=round3points([UWing_MMP[4],[UWing_MMP[1][0],UWing_MMP[1][1],motP_mntD/2],UWing_MMP[2]])[2]+[UWing_XMHO,0];//motor mount hole
+//UWing_MMH=round3points([UWing_MMP[4],[UWing_MMP[1][0],UWing_MMP[1][1],motP_mntD/2],UWing_MMP[2]])[2]+[UWing_XMHO,0];//motor mount hole
+UWing_MMH=round3points([UWing_MMP[3],[UWing_MMP[0][0],UWing_MMP[0][1],(motP_mntD+motP_MT)/2],UWing_MMP[1]])[2]+[UWing_XMHO*0,0];//motor mount hole
 UWing_FWMH=round3points([UWingRP[3],[UWingRP[0].x,UWingRP[0].y,5],UWingRP[1]])[2];//front wing mount hole
 UWing_RWMH=round3points([UWingRP[2],[UWingRP[3].x,UWingRP[3].y,5],UWingRP[0]])[2];//rear wing mount hole
 //UWing_TMHY=(+fs[2]+carbUWP[2]-FR_CuT/2)/cos(UWXang);//Tether Mount Hole Y
@@ -279,21 +296,21 @@ LWing_MMH=round3points([LWing_MMP[2],[LWing_MMP[3][0],LWing_MMP[3][1],motP_mntD/
 wantToPrint=0; //0 for model, 1 to print parts
 rotate([0,0,0])for(i=[0,1])mirror([0,i,0]){
  //translate([fs[0]/2+fusehozoff,0,carbLWP[2]-carbW[2]/2])mirror([1,0,0])thefuselage(fuseHt=fs[2],frntDia=45,rearDia=70,RCT1 = CarRT,RCT2 = RCutT,BCT1 =CarBT,slotD=FR_SD[0],tol=FR_tol,totLength=fs[0],fuseW=fs[1],mergeR=[5,10],mergeT=3);
- /*color("grey"){
+ color("grey"){
  wingUrev2(6.2,0);
  fuseRev2();
  fuseRailsRev2();
- }*/
- color("green")rotate([0,(180-theta)*wantToPrint,0])motMntL(39);
- color("green")rotate([0,(180-theta)*wantToPrint,0])motMntU(30);
+ }
+ color("green")rotate([0,(180-theta)*wantToPrint,0])motMntL(-22.5);//was 39
+ color("green")rotate([0,(180-theta)*wantToPrint,0])motMntU(UWXang);// was 30
  color("green")UWingBrace2();
  color("green")teather();
  //wingL();
  //translate([wantToPrint*-100,wantToPrint*50,0])rotate([-UWXang*wantToPrint,0,0])wingU();
  //rotate([180*wantToPrint,0,0])UWingBrace(MT1=UWB_MT1,MT2=UWB_MT2,Hdia=UWB_Hdia,WBMO=UWB_MO);
  if(wantToPrint==0){
-	//motSpace(0)rotate([0,theta,0])translate([0,0,17.5+motP_MT])for(i=[0:2:360]) rotate([0,0,i])cube([PropD/2,0.1,0.2]);
-	//motSpace(1)rotate([0,theta,0])translate([0,0,17.5+motP_MT])for(i=[0:2:360]) rotate([0,0,i])cube([PropD/2,0.1,0.2]);
+	motSpace(0)rotate([0,theta,0])translate([0,0,17.5+motP_MT])mirror([0,1,0])	prop(3);//for(i=[0:2:360]) rotate([0,0,i])cube([PropD/2,0.1,0.2]);
+	motSpace(1)rotate([0,theta,0])translate([0,0,17.5+motP_MT])					prop(3);//for(i=[0:2:360]) rotate([0,0,i])cube([PropD/2,0.1,0.2]);
     //thecam();
     //translate([-90,-15,carbLWP[2]+FR[0]/2])cube([85,30,35]);//crude battery
     //%translate([-3.7,-18,carbLWP[2]+FR[0]/2+5])cube([36,36,20]);//crude stack
