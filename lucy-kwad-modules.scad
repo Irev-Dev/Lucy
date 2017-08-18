@@ -79,9 +79,9 @@ module motMntU(Hrot=30){
 	difference(){
 		union(){
 			UpperWingSpace()tranZ(-carbW[2]/2-motP_MT2)linear_extrude(motP_MT2)offset(motP_MT2)polygon(polyRound(UWing_MMP,20,0));//wing tip mounting hole polygon extrude
-			hull(){ //using hull here to effectively fill in the gap between where this mount attaches to the wing and where the motor mounts to this mount
+			hull(){ //using hull here to effectively fill in the gap between where this mount attaches to the wing and where the motor mounts to this part
 				//motSpace(1)rotate([0,theta,0]) cylinder(h=motP_MT,d=motP_dia);
-				motSpace(1)rotate([0,theta,0])rotate([0,0,Hrot])linear_extrude(motP_MT)offset(4)motMntHoles("2d");// offset and linearly extruded motor mount holes to form the top of motor mounts
+				motSpace(1)rotate([0,theta,0])rotate([0,0,Hrot])linear_extrude(motP_MT)offset(4)motMntHoles("2d");// offset and linearly extruded the 2d motor mount holes to form the top of motor mounts
 				for(i=[25,65])motSpace(1)rotate([0,theta,0])rotate([0,0,i])translate([0,motP_dia/2+motP_MG[1],0]) cylinder(h=motP_MT,d=motP_MG[0]);	//extent motor mount to help protect motor
 				UpperWingSpace()tranZ(-carbW[2]/2-motP_MT2)linear_extrude(carbW[2]+motP_MT2*2)offset(motP_MT2)polygon(polyRound(UWing_MMPS,20,0));	//wing tip mount
 			}	
@@ -90,12 +90,12 @@ module motMntU(Hrot=30){
 			//slightly better than below but hard to print motSpace(1)rotate([0,theta,0]) translate([0,0,motP_MT])cylinder(h=motP_MT*2,d1=motP_dia*1.2,d2=motP_dia*1.2+motP_MT*10);
 			motSpace(1)rotate([0,theta,0]) translate([0,0,motP_MT+0.01])cylinder(h=motP_MT*5,d=motP_dia*5);//large disk used to ensure the part is printable
 			motSpace(1)rotate([0,theta,0])translate([0,0,motP_MT-motP_CHD])cylinder(h=motP_CHD*3,d=motP_CHdia); // centre hole
-			motSpace(1)rotate([0,theta,0])rotate([0,0,Hrot])motMntHoles("3d"); // motor mount holes
+			motSpace(1)rotate([0,theta,0])rotate([0,0,Hrot])motMntHoles("3d"); // motor mount holes (3d)
 			wingUrev2(100,0.2); //Subtract the wing from this part, expanded a small amount for tolerance
 			UpperWingMMHSpace(){
 				tranZ(-25)cylinder(d=motP_mntD,h=50);// mounting hole for this part
-				//tranZ(motP_MT2/2+motP_WMHCS)cylinder(d1=motP_mntD,d2=motP_mntD+15,h=15); // counter sunk hole NOT USED CURRENTLY
 				tranZ(-motP_MT2-10)cylinder(d=motP_HD,h=10,$fn=motP_HoS); // hex or square hole or nut capture
+				//tranZ(motP_MT2/2+motP_WMHCS)cylinder(d1=motP_mntD,d2=motP_mntD+15,h=15); // counter sunk hole NOT USED CURRENTLY
 			}
 		}
 	}
@@ -103,24 +103,24 @@ module motMntU(Hrot=30){
 module motMntL(Hrot=30){
 	difference(){
 		union(){
-			tranZ(carbLWP[2]-carbW[2]/2-motP_MT2)linear_extrude(motP_MT2)offset(motP_MT2)polygon(polyRound(LWing_MMP,20,0));
-			hull(){
+			tranZ(carbLWP[2]-carbW[2]/2-motP_MT2)linear_extrude(motP_MT2)offset(motP_MT2)polygon(polyRound(LWing_MMP,20,0));//wing tip mounting hole polygon extrude
+			hull(){//using hull here to effectively fill in the gap between where this mount attaches to the wing and where the motor mounts to this part
 				//motSpace(0)rotate([0,theta,0]) cylinder(h=motP_MT,d=motP_dia);
-				motSpace(0)rotate([0,theta,0])rotate([0,0,Hrot])linear_extrude(motP_MT)offset(4)motMntHoles(1);
-				for(i=[25,65])motSpace(0)rotate([0,theta,0])rotate([0,0,i])translate([motP_dia/2+motP_MG[1],0,0]) cylinder(h=motP_MT,d=motP_MG[0]);
-				tranZ(carbLWP[2]-carbW[2]/2-motP_MT2)linear_extrude(carbW[2]+motP_MT2*2)offset(motP_MT2)polygon(polyRound(LWing_MMPS,20,0));
+				motSpace(0)rotate([0,theta,0])rotate([0,0,Hrot])linear_extrude(motP_MT)offset(4)motMntHoles("2d");// offset and linearly extruded the 2d motor mount holes to form the top of motor mounts
+				for(i=[25,65])motSpace(0)rotate([0,theta,0])rotate([0,0,i])translate([motP_dia/2+motP_MG[1],0,0]) cylinder(h=motP_MT,d=motP_MG[0]); //extent motor mount to help protect motor
+				tranZ(carbLWP[2]-carbW[2]/2-motP_MT2)linear_extrude(carbW[2]+motP_MT2*2)offset(motP_MT2)polygon(polyRound(LWing_MMPS,20,0)); //wing tip mount
 			}
 		}
 		union(){
-			motSpace(0)rotate([0,theta,0])rotate([0,0,Hrot])motMntHoles();
-			motSpace(0)rotate([0,theta,0]) tranZ(motP_MT)cylinder(h=motP_MT*5,d=motP_dia*10);
+			motSpace(0)rotate([0,theta,0]) tranZ(motP_MT)cylinder(h=motP_MT*5,d=motP_dia*5);//large disk used to ensure the part is printable
+			motSpace(0)rotate([0,theta,0])translate([0,0,motP_MT-motP_CHD])cylinder(h=motP_CHD*3,d=motP_CHdia);// centre hole
+			motSpace(0)rotate([0,theta,0])rotate([0,0,Hrot])motMntHoles("3d"); // motor mount holes (3d)
+			fuseRev2(100,0.2); //Subtract the wing/base from this part, expanded a small amount for tolerance
 			translate([LWing_MMH[0],LWing_MMH[1],carbLWP[2]-carbW[2]/2]){
-			tranZ(-25)cylinder(d=motP_mntD,h=50);
-			tranZ(motP_MT2+motP_WMHCS)cylinder(d1=motP_mntD,d2=motP_mntD+15,h=15);
-			tranZ(-motP_MT2-10)cylinder(d=motP_HD,h=10,$fn=motP_HoS);
-		 }
-		 motSpace(0)rotate([0,theta,0])translate([0,0,motP_MT-motP_CHD])cylinder(h=motP_CHD*3,d=motP_CHdia);
-		 fuseRev2(100,0.2);
+				tranZ(-25)cylinder(d=motP_mntD,h=50);// mounting hole for this part
+				tranZ(-motP_MT2-10)cylinder(d=motP_HD,h=10,$fn=motP_HoS);// hex or square hole or nut capture
+				//tranZ(motP_MT2+motP_WMHCS)cylinder(d1=motP_mntD,d2=motP_mntD+15,h=15);// counter sunk hole NOT USED CURRENTLY
+			}
 		}
 	}
 }
@@ -136,21 +136,11 @@ module motMntHoles(mode=0){
 	}
  }
 }
-module motMnts(){
-    translate(DSmotT)rotate(DSmotR)for(i=[mot_s[0]/2,-mot_s[0]/2],j=[mot_s[1]/2,-mot_s[1]/2]){
-        translate([i,j,0])difference(){
-            union(){
-                cylinder(h=motP_MT,d=motP_dia);
-                %translate([0,0,10]) cylinder(h=2,d=125);
-            }
-        }//end diffence
-    }
-}
 module fuseRailsRev2(){
-	l=fs[0];//fuselage length
-	w=fs[1];
-	h=fs[2];//fuselage height
-	offs=fusehozoff;
+	l=fs[0];//fuselage length. Temp varible for use in polyRound() arrays
+	w=fs[1];//fuselage width. Temp varible for use in polyRound() arrays
+	h=fs[2];//fuselage height. Temp varible for use in polyRound() arrays
+	offs=fusehozoff;//fuselage offset. Temp varible for use in polyRound() arrays
 	rearRailClip=[
 [-l/2+offs+FR_SD[0]+FR_CuT*tan(FR_RA),	CarBT+FR_CuT,   		15],
 [-l/2+offs+FR_SD[0]+FR_SD[1],     			CarBT+FR_tol,       0],
@@ -258,6 +248,37 @@ module teather(){
 			wingUrev2(100,0.2);
 		}
 	}
+}
+module prop(NP=3){
+    thick=1;
+    width=30;
+    propR=2.5*25.4;
+    startA=40;
+    finA=10;
+    
+    IP=[
+    [5,        0,				0],
+    [10,        propR/5,			1],
+	[3,        propR/3+5,			50],
+    [0,        propR-10,		100],
+    [3,        propR,			1],
+	[2,        propR,			1],
+	[-5,         propR-5,		20],
+    [-15,         propR*2/3,		50],
+    [-5,         0,				0],
+    ];
+    difference(){
+        union(){
+            translate([0,0,5])for(i=[0:NP-1])rotate([0,0,360*i/NP])intersection(){
+                rotate([-90,0,0])rotate([0,0,startA-90])linear_extrude(height=propR,twist=startA-finA,$fa=0.5,$fn=400)square([thick,width],true);
+                translate([0,0,-20])linear_extrude(40)polygon(polyRound(IP));
+            }
+            cylinder(h=10,d=12);   
+        }
+        union(){
+            translate([0,0,-0.1])cylinder(h=10+0.2,d=5);
+        }
+    }
 }
 // handly modules, not of specific parts
 module shellInwards2d(off,OR,IR){
@@ -637,4 +658,14 @@ module angR(ht=3,ang=120,R=3){
 	translate([R/tan(ang/2),R,-0.1])cylinder(h=ht+0.2,r=R);
 	
  }
+}
+module motMnts(){
+    translate(DSmotT)rotate(DSmotR)for(i=[mot_s[0]/2,-mot_s[0]/2],j=[mot_s[1]/2,-mot_s[1]/2]){
+        translate([i,j,0])difference(){
+            union(){
+                cylinder(h=motP_MT,d=motP_dia);
+                translate([0,0,10]) cylinder(h=2,d=125);
+            }
+        }//end diffence
+    }
 }
