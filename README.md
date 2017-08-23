@@ -14,7 +14,7 @@ At this stage the frame has not been tested at all, I have quad components arriv
 
 ## Features
 ### Parametric
-<img src="https://github.com/Irev-Dev/Lucy/blob/master/Images/Capture11.png" width="100%" align="middle">
+<img src="https://github.com/Irev-Dev/Lucy/blob/master/Images/propAng_axialDistance.gif" width="100%" align="middle">
 Most dimensions can be tweaked. The image above for example shows the angle of the body relative to the props varying from 40 to 70 degrees and the distance between the rear props changing from 180 to 130mm.
 
 ### Low Drag
