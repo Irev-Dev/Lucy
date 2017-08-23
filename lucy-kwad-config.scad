@@ -1,6 +1,5 @@
 // todo - camera mount
-// todo - change carbon nut lock as a single list of radii points
-// todo - make gif of theta changing from 35 to 70 and mot_s[2] from 0 to 100
+// todo - make rails even easier to manipulate
 //include the modules 
 include <lucy-kwad-modules.scad>
 //include polyround tool 
@@ -12,8 +11,8 @@ include <polyround.scad>
 
 //VARIABLES//
 PropD=5*25.4;//propsize inch
-//$fn=20;
-mot_s = [PropD+8,PropD+40,100,PropD+5]; //[x,yforLowMots,Z,YforUpMots]
+$fn=20;
+mot_s = [PropD+8,PropD+40,110,PropD+5]; //[x,yforLowMots,Z,YforUpMots]
 dem=max(mot_s[0],mot_s[1],mot_s[3]);
 /*
 mmix [motor number] [throttle] [roll] [pitch] [yaw]
@@ -118,9 +117,10 @@ camH=26.5; // height
 camW=26;//width
 camD=17;//lens diameter
 camPP=3;//pivit point
-camA=35;//angle
+camA=[theta,10];//angle
 camMH=25;//mount height
 camP=[fs[0]/2-43,27];//placement, [X,Z]
+camHP=[4,8];
 
 //rearfastening
 rearF_nh=2.5;// nut height
@@ -235,39 +235,54 @@ fs_RCRP=[//rear clip radii points
 [-l/2+fusehozoff+FR_SD[0]+fs_minT*3,	w/2,							25]
 ];
 
-fs_pp1=[//post points 1
-[carbUWP[0]-carbW[0]+fs_minT,			w/2,							fs_mir],
-[carbUWP[0]-carbW[0]+fs_minT,			w/2+fs_ph,						0],
-[carbUWP[0]-carbW[0]+fs_minT+fs_pt,		w/2+fs_ph,						0],
-[carbUWP[0]-carbW[0]+fs_minT+fs_pt,		w/2,							fs_mir],
+
+fs_pp=[//post points 
+[fs_minT,			0,							fs_mir],
+[fs_minT,			fs_ph,						0],
+[fs_minT+fs_pt,		fs_ph,						0],
+[fs_minT+fs_pt,		0,							fs_mir],
 ];
 
-fs_pp2=[//post points 1
-[carbUWP[0]-fs_minT-fs_pt,		w/2,							fs_mir],
-[carbUWP[0]-fs_minT-fs_pt,		w/2+fs_ph,						0],
-[carbUWP[0]-fs_minT,	w/2+fs_ph,						0],
-[carbUWP[0]-fs_minT,	w/2,							fs_mir],
-];
+// fs_pp2=[//post points 1
+// [carbUWP[0]-fs_minT-fs_pt,		w/2,							fs_mir],
+// [carbUWP[0]-fs_minT-fs_pt,		w/2+fs_ph,						0],
+// [carbUWP[0]-fs_minT,	w/2+fs_ph,						0],
+// [carbUWP[0]-fs_minT,	w/2,							fs_mir],
+// ];
 
 fs_BPC=carbUWP[0]-carbW[0]/2;//bolt point centre
+// fs_BP=[//bolt points
+// [fs_BPC-fs_bd/2,			w/2,							0],
+// [fs_BPC-fs_bd/2,			w/2-fs_bmt,						0],
+// [fs_BPC-fs_bhd/2,		w/2-fs_bmt,						fs_mir],
+// [fs_BPC-fs_bhd/2,		w/2-fs_bmt-fs_bhh,				fs_mir],
+// [fs_BPC+fs_bhd/2,		w/2-fs_bmt-fs_bhh,				fs_mir],
+// [fs_BPC+fs_bhd/2,		w/2-fs_bmt,						fs_mir],
+// [fs_BPC+fs_bd/2,			w/2-fs_bmt,						0],
+// [fs_BPC+fs_bd/2,			w/2,							0],
+// ];
+
 fs_BP=[//bolt points
-[fs_BPC-fs_bd/2,			w/2,							0],
-[fs_BPC-fs_bd/2,			w/2-fs_bmt,						0],
-[fs_BPC-fs_bhd/2,		w/2-fs_bmt,						fs_mir],
-[fs_BPC-fs_bhd/2,		w/2-fs_bmt-fs_bhh,				fs_mir],
-[fs_BPC+fs_bhd/2,		w/2-fs_bmt-fs_bhh,				fs_mir],
-[fs_BPC+fs_bhd/2,		w/2-fs_bmt,						fs_mir],
-[fs_BPC+fs_bd/2,			w/2-fs_bmt,						0],
-[fs_BPC+fs_bd/2,			w/2,							0],
+[-fs_bd/2,			0,							0],
+[-fs_bd/2,			-fs_bmt,					0],
+[-fs_bhd/2,			-fs_bmt,					fs_mir],
+[-fs_bhd/2,			-fs_bmt-fs_bhh,				fs_mir],
+[0,					-fs_bmt*1.7-fs_bhh,				fs_mir],
+[fs_bhd/2,			-fs_bmt-fs_bhh,				fs_mir],
+[fs_bhd/2,			-fs_bmt,					fs_mir],
+[fs_bd/2,			-fs_bmt,					0],
+[fs_bd/2,			0,							0],
 ];
 
 fs_basePoints=concat([
 [-l/2+fusehozoff+7,						0,								25],
 [-l/2+fusehozoff,						w/2-FR[0]-FR_tol/2-fs_minT,		15]
 ],fs_RCRP,
-fs_pp1,
-fs_BP,
-fs_pp2,
+//carbUWP[0]-carbW[0]
+moveRadiiPoints(fs_pp,[carbUWP[0]-carbW[0],fs[1]/2]),
+moveRadiiPoints(fs_BP,[carbUWP[0]-carbW[0]/2,fs[1]/2]),
+moveRadiiPoints(fs_pp,[carbUWP[0]-fs_minT-fs_pt*2,fs[1]/2]),
+//fs_pp2,
 LWingRP,[
 [l/2+fusehozoff-fs_minT-CarRT-fs_mir*2,			w/2+fs_minT,					fs_sr],
 [l/2+fusehozoff,						w/2+fs_minT,					fs_sr],
@@ -299,25 +314,28 @@ LWing_XMHO=-carbWmin/cos(getAngle(LWingRP[3],LWingRP[2]));//X mount hole offset
 LWing_MMH=round3points([LWing_MMP[2],[LWing_MMP[3][0],LWing_MMP[3][1],motP_mntD/2],LWing_MMP[0]])[2]+[-LWing_XMHO,0];//motor mount hole
 
 
+//echo(for(i=[0,1])let(what=what+hi[i]));
 //RENDERS///////////////////////////////////////////////////////////
 wantToPrint=0; //0 for model, 1 to print parts
 rotate([0,0,0]){
- %fuseRev2();
- for(i=[0,1])mirror([0,i,0]){
+ fuseRev2();
+ for(i=[0,0])mirror([0,i,0]){
  //translate([fs[0]/2+fusehozoff,0,carbLWP[2]-carbW[2]/2])mirror([1,0,0])thefuselage(fuseHt=fs[2],frntDia=45,rearDia=70,RCT1 = CarRT,RCT2 = RCutT,BCT1 =CarBT,slotD=FR_SD[0],tol=FR_tol,totLength=fs[0],fuseW=fs[1],mergeR=[5,10],mergeT=3);
  %wingUrev2(6.2,0);
- %fuseRailsRev2();
+ fuseRailsRev2();
  color("green")rotate([0,(180-theta)*wantToPrint,0])motMntL(-22.5);//was 39
  color("green")rotate([0,(180-theta)*wantToPrint,0])motMntU(UWXang);// was 30
  color("green")UWingBrace2();
  color("green")teather();
+ #camM();
+ //polygon(polyRound(moveRadiiPoints(fs_BP2,[carbUWP[0]-carbW[0]/2,fs[1]/2])));
  //wingL();
  //translate([wantToPrint*-100,wantToPrint*50,0])rotate([-UWXang*wantToPrint,0,0])wingU();
  //rotate([180*wantToPrint,0,0])UWingBrace(MT1=UWB_MT1,MT2=UWB_MT2,Hdia=UWB_Hdia,WBMO=UWB_MO);
  if(wantToPrint==0){
-	motSpace(0)rotate([0,theta,0])translate([0,0,17.5+motP_MT])mirror([0,1,0])rotate([0,0,-20])	prop(3);//for(i=[0:2:360]) rotate([0,0,i])cube([PropD/2,0.1,0.2]);
-	motSpace(1)rotate([0,theta,0])translate([0,0,17.5+motP_MT])rotate([0,0,UWXang+60])					prop(3);//for(i=[0:2:360]) rotate([0,0,i])cube([PropD/2,0.1,0.2]);
-	translate([camP[0],0,carbLWP[2]+camP[1]])hull()for(i=[20:10:50])rotate([0,i,0])cam();
+	//motSpace(0)rotate([0,theta,0])translate([0,0,17.5+motP_MT])mirror([0,1,0])rotate([0,0,-20+360*$t])	prop(3);//for(i=[0:2:360]) rotate([0,0,i])cube([PropD/2,0.1,0.2]);
+	//motSpace(1)rotate([0,theta,0])translate([0,0,17.5+motP_MT])rotate([0,0,UWXang+60+360*$t])					prop(3);//for(i=[0:2:360]) rotate([0,0,i])cube([PropD/2,0.1,0.2]);
+	cam();
     //thecam();
     //translate([-90,-15,carbLWP[2]+FR[0]/2])cube([85,30,35]);//crude battery
     //%translate([-3.7,-18,carbLWP[2]+FR[0]/2+5])cube([36,36,20]);//crude stack
