@@ -26,22 +26,43 @@ module cam(expand=0){
     //w=25;
     //h=25;
     sl=10;//square length
-    hp=[4,8];
     dia=17;
-    difference(){
+    translate([camP[0],0,carbLWP[2]+camP[1]])hull()for(i=[70-camA.x:(camA.x-camA.y)/2:70-camA.y])rotate([0,i,0])difference(){
         union(){
             hull(){
-                translate([sl/2-hp[1]-expand,0,0])cube([sl,camW+expand*2,camH+expand*2],true);
-                translate([camL+sl/2-hp[1]+expand,0,0])rotate([0,-90,0])cylinder(h=3,d=dia+expand*2);
+                translate([sl/2-camHP[1]-expand,0,0])cube([sl,camW+expand*2,camH+expand*2],true);
+                translate([camL+sl/2-camHP[1]+expand,0,0])rotate([0,-90,0])cylinder(h=3,d=dia+expand*2);
             }
         }
         union(){
             translate([0,w/2-3,0])rotate([-90,0,0]){
                 cylinder(d=3.2,h=10);   
-                translate([hp[0]-hp[1],0,0])cylinder(d=3.2,h=10);   
+                translate([camHP[0]-camHP[1],0,0])cylinder(d=3.2,h=10);   
             }
         }
     }
+}
+module camM(){
+	mntT=3;//mount thick
+	cen=[camP.x,carbLWP.z+camP.y];
+	H=(camHP.y-camHP.x);//hypotonuse :/ can't spell
+	//for(i=[0.01,-0.01]){
+		p1a=[-cos(theta-camA.x-10)*H,sin(theta-camA.x-10)*H]+cen;
+		p2a=[-cos(theta-camA.y+10)*H,sin(theta-camA.y+10)*H]+cen;
+		p1b=[-cos(theta-camA.x-10)*H-0.01,sin(theta-camA.x-10)*H-0.01]+cen;
+		p2b=[-cos(theta-camA.y+10)*H-0.01,sin(theta-camA.y+10)*H-0.01]+cen;
+		translate([0,camW/2+mntT,0])rotate([90,0,0])linear_extrude(mntT)
+			difference(){
+				union()offset(mntT+1.1)hull(){
+					polygon(concat(CentreN2PointsArc(p1a,p2a,cen,0,20),CentreN2PointsArc(p2b,p1b,cen,0,20)));
+					translate(cen)circle(d=0.01);
+				}
+				union()offset(1.1){
+					polygon(concat(CentreN2PointsArc(p1a,p2a,cen,0,20),CentreN2PointsArc(p2b,p1b,cen,0,20)));
+					translate(cen)circle(d=0.01);
+				}
+			}
+	//}
 }
 module stackMountHoles(holeD=3.2,holeS=30.5){
  for(i=[0,90])rotate([0,0,i])translate([holeS/2,holeS/2,-10])circle(d=holeD); 
@@ -217,34 +238,37 @@ module fuseRailsRev2(){
 [-l/2+offs+FR_SD[0]-FR_CuT,       			CarBT+FR_CuT,       10],
 	];
 
-	frontRailClip=[
+	
+	frontRailClip=concat([
 [l/2+offs-fs_minT,                    	CarBT+FR_MT+FR_BHH, 0],
 [l/2+offs-fs_minT,                    	0,   		    				1],
 [l/2+offs-fs_minT-FR_CuT,               0,			       			1],
 [l/2+offs-fs_minT-FR_CuT,               CarBT,			       	FR_MIR],
-[l/2+offs-fs_minT-FR_CuT-(FR_BHD-FR_BD)/2,CarBT,			      0],
-[l/2+offs-fs_minT-FR_CuT-(FR_BHD-FR_BD)/2,CarBT+FR_MT,	    0],
-[l/2+offs-fs_minT-FR_CuT,								CarBT+FR_MT,	    	FR_MIR],
-[l/2+offs-fs_minT-FR_CuT,								CarBT+FR_MT+FR_BHH,	FR_MIR],
-[l/2+offs-fs_minT-FR_CuT-FR_BHD,				CarBT+FR_MT+FR_BHH,	FR_MIR],
-[l/2+offs-fs_minT-FR_CuT-FR_BHD,				CarBT+FR_MT,				FR_MIR],
-[l/2+offs-fs_minT-FR_CuT-(FR_BHD+FR_BD)/2,CarBT+FR_MT,				0],
-[l/2+offs-fs_minT-FR_CuT-(FR_BHD+FR_BD)/2,CarBT,							0],
-[l/2+offs-fs_minT-FR_CuT-FR_BHD-FR_MT,	CarBT,							1],
-[l/2+offs-fs_minT-FR_CuT-FR_BHD-FR_MT,	CarBT+FR_MT+FR_BHH,	10]
-	];
-      
-	railPoints=concat(
-rearRailClip,[
+[l/2+offs-fs_minT-FR_CuT-(FR_BHD-FR_BD)/2,CarBT,			      0]],
+moveRadiiPoints(fs_BP,[l/2+offs-FR_CuT-fs_minT-fs_bhd/2.2,CarBT],180),
+[[l/2+offs-fs_minT*1.4-FR_CuT-fs_bhd-FR_MT,	CarBT,							1],
+[l/2+offs-fs_minT*1.8-FR_CuT-FR_BHD-FR_MT,	CarBT+FR_MT+FR_BHH,	10]
+	]);	
+	
+	railTE=[//rail top edge
 [-l/2+offs+FR_SD[0]-FR_CuT+h*tan(FR_RA),h,            			FR_R1],
-[l/2+offs+FR_OH,                  			h,                  FR_R2],
+[l/2+offs+FR_OH,                  		h,                  FR_R2],
 [l/2+offs-fs_minT,                      h/2,                FR_R3]
-],
-frontRailClip,[
-[l/2+offs-fs_minT-FR_CuT,               h/2-FR_CuT*tan((atan(h/2/FR_OH)+90)/2+90),FR_R3+FR_CuT],
-[l/2+offs+FR_OH+FR_CuT*tan(atan(h/2/FR_OH)/2+90),h-FR_CuT,2],
-[-l/2+offs+FR_SD[0]-FR_CuT+h*tan(FR_RA)+FR_CuT/tan((FR_RA-90)/2+90),h-FR_CuT,FR_R1-FR_CuT]
-]
+	];
+
+	railPoints=concat(
+rearRailClip,
+railTE,
+frontRailClip,
+RailCustomiser(concat([rearRailClip[7]],railTE,[frontRailClip[0]]),FR_CuT,2)
+//[
+//parallelFollow([frontRailClip[0],railTE[2],railTE[1]],		FR_CuT,		FR_R3+FR_CuT),
+//parallelFollow([railTE[2],railTE[1],railTE[0]],				FR_CuT,		2),
+//parallelFollow([railTE[1],railTE[0],rearRailClip[7]],		FR_CuT,		FR_R1-FR_CuT),
+//[l/2+offs-fs_minT-FR_CuT,               h/2-FR_CuT*tan((atan(h/2/FR_OH)+90)/2+90),FR_R3+FR_CuT],
+//[l/2+offs+FR_OH+FR_CuT*tan(atan(h/2/FR_OH)/2+90),h-FR_CuT,2],
+//[-l/2+offs+FR_SD[0]-FR_CuT+h*tan(FR_RA)+FR_CuT/tan((FR_RA-90)/2+90),h-FR_CuT,FR_R1-FR_CuT]
+//]
 	);
 	translate([0,w/2,carbLWP[2]-carbW[2]/2])rotate([90,0,0])linear_extrude(CarRT)difference(){
 		union(){
@@ -393,9 +417,18 @@ module UpperWingMMHSpace(){
 module UpperWingSpace(){
 	translate([0,carbUWP[1],carbUWP[2]])rotate([UWXang,0,0])children();
 }
+module tranX(offset){
+	translate([offset,0,0])children();}
+module tranY(offset){
+	translate([0,offset,0])children();}
 module tranZ(offset){
-	translate([0,0,offset])children();
-}
+	translate([0,0,offset])children();}
+module rotX(rot){
+	rotate([rot,0,0])children();}
+module rotY(rot){
+	rotate([0,rot,0])children();}
+module rotZ(rot){	
+	rotate([0,0,rot])children();}
 module motSpace(lowOrUp = 0){
     if(lowOrUp>1){
 		echo("motSpace() index out of range");
@@ -436,6 +469,12 @@ function mirrorYpoints(a)=
 
 function interpX(p0,p1,theY)=//outputs linearly interpolated X value for a given Y.
 	p0.x+(theY-p0.y)*(p1.x-p0.x)/(p1.y-p0.y);
+	
+function RailCustomiser(rp,thick,minR)=
+		let(CWorCCW=CWorCCW(rp))
+		let(Lrp=len(rp)-3)
+		let(temp=[for(i=[0:Lrp]) parallelFollow([rp[Lrp-i],rp[Lrp-i+1],rp[Lrp-i+2]],thick,minR,mode=CWorCCW)])
+		temp;
 // Old modules, will probably delete sooner or later
 module UWingBrace(MT1=2,MT2=3,Hdia=3.2,WBMO=[5,5]){//wingbracemountoffset
  //translate(carbUWP-[carbW[0]+carbW[3]*-0+0.1-0.5,0,0])rotate([-90+UWXang,0,0])rotate([0,-90+UWRYang,0])translate([0,-carbW[2]/2,0])cube([100,0.5,100]);
