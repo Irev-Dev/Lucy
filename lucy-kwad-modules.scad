@@ -323,10 +323,10 @@ LWingRP(2),
     tranZ(carbLWP[2]-carbW[2]/2 -(carbLWP[2]-carbW[2]/2)*partLayout){
 		fs_postP=[
 [fusehozoff+l/2-fs_minT+fs_mir,			w/2+FR_tol/2,		fs_mir],
-//[fusehozoff+l/2-fs_minT,				w/2-CarRT/2-FR_tol/4,0],
+[fusehozoff+l/2-fs_minT,				w/2-CarRT/2-FR_tol/4,0],
 [fusehozoff+l/2-fs_minT+fs_mir,			w/2-CarRT-FR_tol/2,	fs_mir],
 [fusehozoff+l/2-fs_minT-FR_CuT-fs_mir,	w/2-CarRT-FR_tol/2,	fs_mir],
-//[fusehozoff+l/2-fs_minT-FR_CuT,			w/2-CarRT/2-FR_tol/4,0],
+[fusehozoff+l/2-fs_minT-FR_CuT,			w/2-CarRT/2-FR_tol/4,0],
 [fusehozoff+l/2-fs_minT-FR_CuT-fs_mir,	w/2+FR_tol/2,		fs_mir]
 		];				
 		tranZ(-tol_expand/2)linear_extrude(CarBT+tol_expand){
@@ -341,7 +341,7 @@ LWingRP(2),
 								polygon(polyRound(fs_postP,gfn,0));
 								if(shellT<99)translate(LWing_MMH)circle(d=motP_mntD);//don't include if shell i very large as it is being used to differnce from the motor mount and it causes trouble included
 								//translate([fusehozoff+l/2-fs_minT-FR_CuT-FR_BHD/2,w/2-CarRT/2])circle(d=3.2);
-								translate([l/2+fusehozoff-fs_minT-FR_CuT-FR_BHD/2/*+FR_BD/2*/,w/2-CarRT/2])circle(d=3.2);
+								translate([l/2+fusehozoff-fs_minT-FR_CuT-fs_bhd/2/*+FR_BD/2*/,w/2-CarRT/2])circle(d=3.2);
 								for(i=[-76,-76/*20*/])translate([i,0,0])stackMountHoles();
 							}
 							CamMSpace(0)tranX(camMT+camBMD/2)circle(d=camBMD);
@@ -357,10 +357,10 @@ LWingRP(2),
 	let(l=fs[0],
 	w=fs[1],
 	LWingRP=[//Lower ring radii points. First point starts at the rear base of the wing, then moves out to the tip of the wing
-[carbLWP[0]-carbW[0],					w/2,							fs_wbr[1]],		
-[mot_cords[0][0]+carbLWTO[0]-carbW[1],	mot_cords[0][1]+carbLWTO[1],	fs_wtr],
-[mot_cords[0][0]+carbLWTO[0],			mot_cords[0][1]+carbLWTO[1],	fs_wtr],
-[carbLWP[0],							w/2,							fs_wbr[0]],
+[carbLWP[0]-carbW[0],						w/2,							fs_wbr[1]],		
+[mot_cords[0][0]+carbLWTO[0]-carbW[1],		mot_cords[0][1]+carbLWTO[1],	fs_wtr],
+[mot_cords[0][0]+carbLWTO[0],				mot_cords[0][1]+carbLWTO[1],	fs_wtr],
+[carbLWP[0],								w/2,							fs_wbr[0]],
 	])
 	range(LWingRP,index1,index2);
 }
