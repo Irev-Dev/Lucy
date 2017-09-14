@@ -18,8 +18,8 @@ include <polyround.scad>
 
 //VARIABLES//
 PropD=5*25.4;//propsize inch
-$fn=50;
-gfn=30;
+//$fn=50;
+gfn=4;
 mot_s = [PropD+8,PropD+40,110,PropD+5]; //[x,yforLowMots,Z,YforUpMots]
 dem=max(mot_s[0],mot_s[1],mot_s[3]);
 
@@ -205,7 +205,7 @@ LWing_MMH=round3points([LWing_MMP(2),[LWing_MMP(3)[0],LWing_MMP(3)[1],motP_mntD/
 //echo(for(i=[0,1])let(what=what+hi[i]));
 //RENDERS///////////////////////////////////////////////////////////
 Print2Console();
-partLayout=1; //0 for model, 1 to print parts
+partLayout=0; //0 for model, 1 to print parts
 rotate([0,-0,0]){
  fuseRev2(6.5,0,partLayout);
  for(i=[0,1])mirror([0,i,0]){
