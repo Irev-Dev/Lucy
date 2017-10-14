@@ -18,9 +18,9 @@ include <polyround.scad>
 
 //VARIABLES//
 PropD=5*25.4;//propsize inch
-//$fn=50;
-gfn=4;
-mot_s = [PropD+8,PropD+40,110,PropD+5]; //[x,yforLowMots,Z,YforUpMots]
+$fn=20;
+gfn=8;
+mot_s = [PropD+8,PropD+40,110,PropD+10]; //[x,yforLowMots,Z,YforUpMots]
 dem=max(mot_s[0],mot_s[1],mot_s[3]);
 
 theta = 70;
@@ -65,7 +65,7 @@ UWB_minP=0.5;//min print thickness (support material)
 UWB_HoS=6; //hex or square 4=square 6=hex
 
 //fuselage and rails, FR=fuselage rails
-fs=[190,30+14+1,46]; //length width height
+fs=[185,30+9,43]; //length width height
 fs_mir=1;//min internal radius (set by the size of your routing bit)
 fs_mer=0.2;//min external radius
 fs_sr=2;//standard radius
@@ -78,19 +78,20 @@ fs_bhh=3;//bolt head height
 fs_bmt=3;//bolt min thickness
 fs_ph=4;//post height
 fs_pt=4;//post thickness
-fusehozoff=-17;
-FR=[7,5,6,65,35]; //[carbon thickness,other thickness,trasition radius, front angle, rear angle]
-CarRT=7;
+fusehozoff=-20;
+FR=[4,5,6,65,35]; //[carbon thickness,other thickness,trasition radius, front angle, rear angle]
+CarRT=4;
 CarBT=FR[0];
 RCutT=5.5;
 
+//frameRail
 FR_SD=[5,5];//slot depth1,slot depth2
 FR_tol=0.2;
-FR_CaT=7;//carbon thickness
+FR_CaT=4;//carbon thickness
 FR_CuT=7;//cut thickness
 FR_MT=3;//min thickness
-FR_RA=23;//rear angle
-FR_OH=20;//front overhang
+FR_RA=20;//rear angle
+FR_OH=13;//front overhang
 FR_MIR=1;//min internal radius
 FR_SR=3;//standard radius
 FR_R1=20;//radius 1
@@ -100,6 +101,13 @@ FR_BHD=7;//bolt head dia
 FR_BD=3.2;//bolt dia
 FR_BHH=3;//bolt head height
 
+WB_RSD=5;//rail slot depth
+WB_CaT=4;
+WB_PW=4;//post width
+WB_mir=1;
+WB_XP=-56;//X position
+WB_BNO=1.5;//bottom nut offset
+WB_tol=0.2;
 
 Stack_HS=30.5;
 Stack_HD=3.2;
@@ -113,7 +121,7 @@ camD=17;//lens diameter
 camPP=3;//pivit point
 camA=[theta,10];//angle
 camMH=25;//mount height
-camP=[fs[0]/2-39,24];//placement, [X,Z]
+camP=[fs[0]/2-43,24];//placement, [X,Z]
 camRR=18;//rear room (behind camera)
 camHP=[2,7];
 camST=0.55;//shell thickness
@@ -131,12 +139,12 @@ rearF_bd=3.2;//bolt diameter
 
 mot_cords=[[(mot_s[0]*cos(theta)+mot_s[2]*sin(theta))/2,mot_s[1]/2,(-mot_s[0]*sin(theta)+mot_s[2]*cos(theta))/2],
 [(-mot_s[0]*cos(theta)-mot_s[2]*sin(theta))/2,mot_s[3]/2,(mot_s[0]*sin(theta)-mot_s[2]*cos(theta))/2]];
-carbW=[33,23,7,4]; //wing [base width, tip width, thickness,radius]
+carbW=[33,23,4,4]; //wing [base width, tip width, thickness,radius]
 carbWmin=2; //wing min thickness
 carbLWTO = [-5,-3,15]; //lower wing tip offset [x,y,z]
 carbLWR=[10,20];//lower wing radius [front,rear]
 carbLWP=[22,fs[1]/2,mot_cords[0][2]+carbLWTO[2]]; //lower wing placement [x,y,z]
-carbUWP=[-18,(fs[1]+carbW[2])/2+fs_ph,carbLWP[2]+UWB_MO[1]]; //lower wing placement [x,y,z]
+carbUWP=[-28,(fs[1]+carbW[2]*0)/2,carbLWP[2]+CarBT/2+UWB_MO[1]*0]; //lower wing placement [x,y,z]
 carbUWTO = [-5,-12,-5]; //lower wing tip offset [x,y,z]
 FR_RHP=[-fs[0]/2+fusehozoff+FR_SD[0]-FR_CuT+fs[2]*tan(FR_RA)+11,fs[2]-FR_CuT/2];//Rear hole placement, todo hardnum curently offset from the corrner of the rail by an abitary amount, ideally the hole should be placed just behind the wing so that it is still accessible with a allan key
 
@@ -149,11 +157,13 @@ TeMT=3;//tether Min thickness
 UWYlen=pointDist([carbUWP[1],carbUWP[2]],[mot_cords[1][1]+carbUWTO[1],mot_cords[1][2]+carbUWTO[2]]);
 //Upper wing radii points
 
+UW_FWO=3; //front wing offset
 UWingRP=[
-[carbUWP[0],							0,			3],
+[carbUWP[0],							UW_FWO,		3],
 [mot_cords[1][0]+carbUWTO[0],			UWYlen,		3],	
 [mot_cords[1][0]+carbUWTO[0]-carbW[1],	UWYlen,		3],	
-[carbUWP[0]-carbW[0],					0,			3]
+[carbUWP[0]-carbW[0],					0,			3],
+[carbUWP[0]-carbW.x/2,					UW_FWO,		10]
 ];
 UWRYang=getAngle(UWingRP[2],UWingRP[3]);
 UWFYang=getAngle(UWingRP[1],UWingRP[0]);
@@ -206,29 +216,35 @@ LWing_MMH=round3points([LWing_MMP(2),[LWing_MMP(3)[0],LWing_MMP(3)[1],motP_mntD/
 //RENDERS///////////////////////////////////////////////////////////
 Print2Console();
 partLayout=0; //0 for model, 1 to print parts
-rotate([0,-0,0]){
- fuseRev2(6.5,0,partLayout);
- for(i=[0,1])mirror([0,i,0]){
+rotate([0,0,0]){
+ fuse3(6.5,0,partLayout);
+ WbraceC(partLayout);
+ for(i=[0,0])mirror([0,i,0]){
  //translate([fs[0]/2+fusehozoff,0,carbLWP[2]-carbW[2]/2])mirror([1,0,0])thefuselage(fuseHt=fs[2],frntDia=45,rearDia=70,RCT1 = CarRT,RCT2 = RCutT,BCT1 =CarBT,slotD=FR_SD[0],tol=FR_tol,totLength=fs[0],fuseW=fs[1],mergeR=[5,10],mergeT=3);
- wingUrev2(6.2,0,partLayout);
+ WbraceP(partLayout);
+ wingU3(6.2,0,partLayout);
  fuseRailsRev2(0,partLayout);
  color("green")motMntL(-22.5,partLayout);//was 39
  color("green")motMntU(UWXang,partLayout);// was 30
- color("green")UWingBrace2(partLayout);
- color("green")teather(partLayout);
  color("green")camM(partLayout);
+//  motMntL(-22.5,partLayout);//was 39
+//  motMntU(UWXang,partLayout);// was 30
+ camM(partLayout);
  //polygon(polyRound(moveRadiiPoints(fs_BP2,[carbUWP[0]-carbW[0]/2,fs[1]/2])));
  //translate([partLayout*-100,partLayout*50,0])rotate([-UWXang*partLayout,0,0])wingU();
  //rotate([180*partLayout,0,0])UWingBrace(MT1=UWB_MT1,MT2=UWB_MT2,Hdia=UWB_Hdia,WBMO=UWB_MO);
  if(partLayout==0){
-	bladenum=3;
-	//motSpace(0)rotate([0,theta,0])translate([0,0,17.5+motP_MT])mirror([0,1,0])rotate([0,0,-20+360*$t])	prop(bladenum);	motSpace(1)rotate([0,theta,0])translate([0,0,17.5+motP_MT])rotate([0,0,UWXang+60+360*$t])			prop(bladenum);//for(i=[0:2:360]) rotate([0,0,i])cube([PropD/2,0.1,0.2]);
-	cam(0,0);
+	bladenum=4;
+    // tranZ(17.5)prop(bladenum,PropD);
+    // motor();
+	//motSpace(0)rotate([0,theta,0])translate([0,0,17.5+motP_MT])mirror([0,1,0])rotate([0,0,-20+360*$t])	prop(bladenum,PropD);	motSpace(1)rotate([0,theta,0])translate([0,0,17.5+motP_MT])rotate([0,0,UWXang+60+360*$t])			prop(bladenum,PropD);//for(i=[0:2:360]) rotate([0,0,i])cube([PropD/2,0.1,0.2]);
+    //for(i=[0,1])motSpace(i)rotate([0,theta,0])translate([0,0,motP_MT])motor();
+	//cam(0,0);
     //thecam();
     //translate([-90,-15,carbLWP[2]+FR[0]/2])cube([85,30,35]);//crude battery
     //%translate([-3.7,-18,carbLWP[2]+FR[0]/2+5])cube([36,36,21]);//crude stack
-    %translate([-35+fusehozoff,-15,carbLWP[2]+FR[0]/2])cube([85,30,35]);//crude battery
-    %translate([-77+fusehozoff,-18,carbLWP[2]+FR[0]/2])cube([36,36,21]);//crude stack
+    //%translate([-35+fusehozoff,-15,carbLWP[2]+FR[0]/2])cube([85,30,35]);//crude battery
+    //%translate([-77+fusehozoff,-18,carbLWP[2]+FR[0]/2])cube([36,36,21]);//crude stack
  }
  }
 }
