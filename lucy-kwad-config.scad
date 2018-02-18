@@ -10,7 +10,7 @@ Intellectual property is bullshit.
 //include the modules 
 include <lucy-kwad-modules.scad>
 //include polyround tool 
-include <polyround.scad>
+include <libraries/polyround/polyround.scad>
 
 
 //echo($vpr);echo($vpt);echo($vpd);//rotation, translation, camdist? focal?
