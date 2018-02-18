@@ -84,25 +84,61 @@ module cam(expand = 0, mode = 0){
 	sl = 10;//square length
 	dia = 17;
 	translate([camP[0], 0, carbLWP[2] + camP[1]]){
-		hull()for(i = [70 - camA.x, 70 - camA.y])rotate([0, i, 0])if(expand > 0) translate([camL + sl * 2 - camHP[1] + expand, 0, 0])rotate([0, -90, 0])cylinder(h = camL + sl - camHP[1] + expand, d = dia + expand * 2);
+		hull(){
+			for(i = [70 - camA.x, 70 - camA.y]){
+				rotate([0, i, 0]){
+					if(expand > 0){
+						translate([camL + sl * 2 - camHP[1] + expand, 0, 0]){
+							rotate([0, -90, 0]){
+								cylinder(h = camL + sl - camHP[1] + expand, d = dia + expand * 2);
+							}
+						}
+					}
+				}
+			}
+		}
 		if (mode == 0) {
 			//hull()rotate([0, 20, 0])difference(){
-			hull()for(i = [70 - camA.x:(camA.x - camA.y) / div:70 - camA.y])rotate([0, i, 0])difference(){
-				union(){
-					translate([sl / 2 - camHP[1] - expand, 0, 0])cube([sl, camW + expand * 2, camH + expand * 2], true);
-					translate([camL - camHP[1] + 2 + expand, 0, 0])rotate([0, -90, 0])cylinder(h = 3, d = dia + expand * 2);
-				}
-				union(){
-					translate([0, w / 2 - 3, 0])rotate([-90, 0, 0]){
-						cylinder(d = 3.2, h = 10);
-						translate([camHP[0] - camHP[1], 0, 0])cylinder(d = 3.2, h = 10);
+			hull(){
+				for(i = [70 - camA.x:(camA.x - camA.y) / div:70 - camA.y]){
+					rotate([0, i, 0]){
+						difference(){
+							union(){
+								translate([sl / 2 - camHP[1] - expand, 0, 0]){
+									cube([sl, camW + expand * 2, camH + expand * 2], true);
+								}
+								translate([camL - camHP[1] + 2 + expand, 0, 0]){
+									rotate([0, -90, 0]){
+										cylinder(h = 3, d = dia + expand * 2);
+									}
+								}
+							}
+							union(){
+								translate([0, w / 2 - 3, 0]){
+									rotate([-90, 0, 0]){
+										cylinder(d = 3.2, h = 10);
+										translate([camHP[0] - camHP[1], 0, 0]){
+											cylinder(d = 3.2, h = 10);
+										}
+									}
+								}
+							}
+						}
 					}
 				}
 			}
 		} else {
-			for (i = [70 - camA.x:(camA.x - camA.y) / div:70 - camA.y])hull(){
-				rotate([0, i, 0])translate([camL + sl / 2 - camHP[1] + expand, 0, 0])rotate([0, -90, 0])cylinder(h = 3, d = dia + expand * 2);
-				rotate([0, i + 1, 0])translate([camL + sl / 2 - camHP[1] + expand, 0, 0])rotate([0, -90, 0])cylinder(h = 3, d = dia + expand * 2);
+			for (i = [70 - camA.x:(camA.x - camA.y) / div:70 - camA.y]){
+				hull(){
+					rotate([0, i, 0]){
+						translate([camL + sl / 2 - camHP[1] + expand, 0, 0]){
+							rotate([0, -90, 0]){
+								cylinder(h = 3, d = dia + expand * 2);
+							}
+						}
+					}
+					rotate([0, i + 1, 0])translate([camL + sl / 2 - camHP[1] + expand, 0, 0])rotate([0, -90, 0])cylinder(h = 3, d = dia + expand * 2);
+				}
 			}
 		}
 	}
