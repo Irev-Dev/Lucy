@@ -107,6 +107,106 @@ module cam(expand = 0, mode = 0){
 		}
 	}
 }
+module camRef(partLayout = 0){
+	mntT = 3;//mount thick
+	cen = [camP.x, carbLWP.z + camP.y];
+	H = (camHP.y - camHP.x);//hypotenuse
+	p1a = [-cos(theta - camA.x - 10) * H, sin(theta - camA.x - 10) * H] + cen;
+	p2a = [-cos(theta - camA.y + 10) * H, sin(theta - camA.y + 10) * H] + cen;
+	p1b = [-cos(theta - camA.x - 10) * H - 0.01, sin(theta - camA.x - 10) * H - 0.01] + cen;
+	p2b = [-cos(theta - camA.y + 10) * H - 0.01, sin(theta - camA.y + 10) * H - 0.01] + cen;
+	thinwall_1side = concat(
+		[[camP.x - camRR, 0, 1]],
+		[[camP.x - camRR, railTE(0).y, 10]],
+		railTE(1, 2),
+		[[frontRailClip(1).x, frontRailClip(1).y, 0]]
+	);
+
+	thinwall = concat(
+		thinwall_1side,
+		//RailCustomiser(thinwall_1side,camST,0.5,1,1,0,0)
+		//RailCustomiser(rp,thick,minR,sgn=1,endpointenable=1,endAng1=0,endAng2=0)
+		revList(RailCustomiser(thinwall_1side, o1 = camST + 0.06/*camMT*1.3*/, minR = 0.5, mode = 0))
+	);
+	thinwall1 = concat(
+		thinwall_1side,
+		//RailCustomiser(thinwall_1side,camMT*1.3,0.5,1,1,0,0)
+		revList(RailCustomiser(thinwall_1side, o1 = camMT * 1.3, minR = 0.5, mode = 0))
+	);
+	//#for(i=thinwall_1side)rotate([-90,0,0])translate(i)circle(1);
+	//	#for(i=thinwall)rotate([-90,0,0])translate(i)circle(0.5);
+	//	#for(i=thinwall1)rotate([-90,0,0])translate(i)circle(1);
+	//	echo(len(thinwall),len(thinwall1));
+	railsubtract = concat(
+		//railTE(),
+		//[[frontRailClip(0).x,-50,0]],
+		//RailCustomiser(concat([rearRailClip(7)],railTE()),30,2,1,0)
+		RailCustomiser(concat(railTE(), [[frontRailClip(0).x, -50, 0]]), o1 = 0, o2 = 60, minR = 2, mode = 0, a2 = -1)
+	);
+	bottomMountS = [//bottomMountSubtract points
+		[camST, camBMH, 3],
+		[camMT * 2 + camBMD, camBMH - camMT * 2 - camBMD + camST, 3],
+		[camMT * 2 + camBMD, camBMH - camMT * 2 - camBMD + camST - 20, 0],
+		[camMT * 2 + camBMD + 4, camBMH - camMT * 2 - camBMD + camST - 20, 0],
+		[camMT * 2 + camBMD + 4, camBMH + 4, 0],
+		[camST, camBMH + 4, 0],
+	];
+	tranX(60 * partLayout)rotX(partLayout * 180)difference(){
+		union(){
+			CamMSpace(0)difference(){
+				// linear_extrude(camBMH + 2)round2d(0, 2){
+				// 	tranX(camMT + camBMD / 2)circle(d = camMT * 2 + camBMD);
+				// 	square([camST, fs.y / 4]);
+				// }
+				// tranY(fs.y / 4)rotX(90)linear_extrude(fs.y / 2)polygon(polyRound(bottomMountS, gfn, 0));
+			}
+			hull(){
+				// intersection(){
+				// 	tranY(fs.y / 2 - carbW[2])rotX(90)linear_extrude(mntT * 3)translate([fs.x / 2 + fusehozoff + FR_OH + FR_CuT * tan(atan(fs.z / 2 / FR_OH) / 2 + 90), (carbLWP[2] - carbW[2] / 2) + fs.z - FR_CuT])circle(d = FR_BD + mntT * 3);
+				// 	translate([0, w / 2 - FR_CaT, carbLWP[2] - carbW[2] / 2])rotate([90, 0, 0])linear_extrude(camMT * 3)polygon(polyRound(thinwall1, gfn, 0));
+				// }
+				// tranY(fs.y / 2 - carbW[2])rotX(90)linear_extrude(mntT * 3)translate([fs.x / 2 + fusehozoff + FR_OH + FR_CuT * tan(atan(fs.z / 2 / FR_OH) / 2 + 90), (carbLWP[2] - carbW[2] / 2) + fs.z - FR_CuT])circle(d = FR_BD + mntT * 2);
+
+			}
+			// translate([0, w / 2 - FR_CaT, carbLWP[2] - carbW[2] / 2])rotate([90, 0, 0])linear_extrude(fs[1] / 2 - FR_CaT)polygon(polyRound(thinwall, gfn, 0));
+			// translate([0, w / 2 - FR_CaT, carbLWP[2] - carbW[2] / 2])rotate([90, 0, 0])linear_extrude(camMT)polygon(polyRound(thinwall1, gfn, 0));
+			// hull(){
+			// 	translate([camP.x - 7, w / 2 - FR_CaT - mntT, carbLWP[2] - carbW[2] / 2 + fs.z - 0.1])cube([10, mntT, 0.05]);
+			// 	translate([0, camW / 2 + mntT / 2, 0])rotate([90, 0, 0])linear_extrude(mntT * 0.5)union()offset(mntT + 1.1)hull(){
+			// 		polygon(concat(CentreN2PointsArc(p1a, p2a, cen, 0, 20), CentreN2PointsArc(p2b, p1b, cen, 0, 20)));
+			// 		translate(cen)circle(d = 0.01);
+			// 	}
+			// }
+			// difference(){
+			// 	union(){
+			// 		hull()translate([cen.x, 0, cen.y])for(i = [70 - camA.x:(camA.x - camA.y) / 5:70 - camA.y])rotate([0, i, 0])tranX(camL - camHP[1] + camD / 2 - 14)sphere(d = camD + 7);
+			// 	}
+			// 	translate([0, w / 2 + 0.1, carbLWP[2] - carbW[2] / 2])rotate([90, 0, 0])linear_extrude(fs[1] + 0.2)polygon(polyRound(railsubtract, gfn, 0));
+			// }
+		}
+		union(){
+			// cam(0.4, 0);
+			// fuseRev2(100, 0.2);
+			// fuseRailsRev2(0.2);
+			// tranY(fs.y / 2 - carbW[2] - 0.1)rotX(90)linear_extrude(mntT * 3 + 0.2)translate([fs.x / 2 + fusehozoff + FR_OH + FR_CuT * tan(atan(fs.z / 2 / FR_OH) / 2 + 90), (carbLWP[2] - carbW[2] / 2) + fs.z - FR_CuT])circle(d = FR_BD);
+			// #translate([camMT + camBMD / 2, 0, -0.1])CamMSpace(0)linear_extrude(bottomMountS[1].y)circle(d = camBMD);
+			// CamMSpace(0)translate([-50, -100.02, -50])cube([150, 100, 100]);
+			translate([0, camW / 2 + mntT+5, 0])rotate([90, 0, 0])tranZ(-0.05)linear_extrude(mntT + 0.1 + 10){//camer mount plate
+				union()offset(1.1){
+					polygon(concat(CentreN2PointsArc(p1a, p2a, cen, 0, 20), CentreN2PointsArc(p2b, p1b, cen, 0, 20)));
+					translate(cen)circle(d = 0.02);
+				}
+			}
+		}
+	}
+	/*rotX(-90)translate([cen.x,-cen.y])linear_extrude(10)intersection(){
+		difference(){
+			circle(camL-camHP.x+4,$fn=50);
+			circle(camL-camHP.x,$fn=50);
+		}
+		polygon([[0,0],[cos(70-camA.x-20)*50,sin(70-camA.x-20)*50],[cos(70-camA.y+20)*50,sin(70-camA.y+20)*50]]);
+	}*/
+}
 module camM(partLayout = 0){
 	mntT = 3;//mount thick
 	cen = [camP.x, carbLWP.z + camP.y];

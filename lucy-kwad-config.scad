@@ -19,7 +19,7 @@ include <polyround.scad>
 //VARIABLES//
 PropD=5*25.4;//propsize inch
 $fn=20;
-gfn=8;
+gfn=6;
 mot_s = [PropD+8,PropD+40,110,PropD+10]; //[x,yforLowMots,Z,YforUpMots]
 dem=max(mot_s[0],mot_s[1],mot_s[3]);
 
@@ -216,35 +216,42 @@ LWing_MMH=round3points([LWing_MMP(2),[LWing_MMP(3)[0],LWing_MMP(3)[1],motP_mntD/
 //RENDERS///////////////////////////////////////////////////////////
 Print2Console();
 partLayout=0; //0 for model, 1 to print parts
+// difference(){
+//     fuse3(6.5,0,partLayout);
+//     translate([-200,-100,-50])cube([400,100,100]);
+// }
 rotate([0,0,0]){
- fuse3(6.5,0,partLayout);
- WbraceC(partLayout);
- for(i=[0,0])mirror([0,i,0]){
+  fuse3(6.5,0,partLayout);
+ //WbraceC(partLayout);
+ for(i=[0,1])mirror([0,i,0]){
  //translate([fs[0]/2+fusehozoff,0,carbLWP[2]-carbW[2]/2])mirror([1,0,0])thefuselage(fuseHt=fs[2],frntDia=45,rearDia=70,RCT1 = CarRT,RCT2 = RCutT,BCT1 =CarBT,slotD=FR_SD[0],tol=FR_tol,totLength=fs[0],fuseW=fs[1],mergeR=[5,10],mergeT=3);
- WbraceP(partLayout);
- wingU3(6.2,0,partLayout);
- fuseRailsRev2(0,partLayout);
- color("green")motMntL(-22.5,partLayout);//was 39
+//  WbraceP(partLayout);
+  wingU3(6.2,0,partLayout);
+//  fuseRailsRev2(0,partLayout);
+  color("green")motMntL(-22.5,partLayout);//was 39
  color("green")motMntU(UWXang,partLayout);// was 30
- color("green")camM(partLayout);
+//  color("green")camM(partLayout);
+ //camRef(partLayout);
 //  motMntL(-22.5,partLayout);//was 39
 //  motMntU(UWXang,partLayout);// was 30
- camM(partLayout);
+//  camM(partLayout);
  //polygon(polyRound(moveRadiiPoints(fs_BP2,[carbUWP[0]-carbW[0]/2,fs[1]/2])));
  //translate([partLayout*-100,partLayout*50,0])rotate([-UWXang*partLayout,0,0])wingU();
  //rotate([180*partLayout,0,0])UWingBrace(MT1=UWB_MT1,MT2=UWB_MT2,Hdia=UWB_Hdia,WBMO=UWB_MO);
+import("pod3.stl");
+
  if(partLayout==0){
 	bladenum=4;
     // tranZ(17.5)prop(bladenum,PropD);
     // motor();
 	//motSpace(0)rotate([0,theta,0])translate([0,0,17.5+motP_MT])mirror([0,1,0])rotate([0,0,-20+360*$t])	prop(bladenum,PropD);	motSpace(1)rotate([0,theta,0])translate([0,0,17.5+motP_MT])rotate([0,0,UWXang+60+360*$t])			prop(bladenum,PropD);//for(i=[0:2:360]) rotate([0,0,i])cube([PropD/2,0.1,0.2]);
     //for(i=[0,1])motSpace(i)rotate([0,theta,0])translate([0,0,motP_MT])motor();
-	//cam(0,0);
-    //thecam();
-    //translate([-90,-15,carbLWP[2]+FR[0]/2])cube([85,30,35]);//crude battery
+	cam(0,0);
+    // thecam();
+    // translate([-90,-15,carbLWP[2]+FR[0]/2])cube([85,30,35]);//crude battery
     //%translate([-3.7,-18,carbLWP[2]+FR[0]/2+5])cube([36,36,21]);//crude stack
-    //%translate([-35+fusehozoff,-15,carbLWP[2]+FR[0]/2])cube([85,30,35]);//crude battery
-    //%translate([-77+fusehozoff,-18,carbLWP[2]+FR[0]/2])cube([36,36,21]);//crude stack
+    %translate([-35+fusehozoff,-15,carbLWP[2]+FR[0]/2])cube([85,30,35]);//crude battery
+    %translate([-77+fusehozoff,-18,carbLWP[2]+FR[0]/2])cube([36,36,21]);//crude stack
  }
  }
 }
