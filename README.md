@@ -1,3 +1,8 @@
+### Notice
+Not maintained! Here's the back story. I started this project as way to mix a currenty hobby of racing quads and my new found love of OpenSCAD. As part of developing it I ran into frustrations with not being able to easly add fillets in OpenSCAD and so developed the [Round-Anything](https://github.com/Irev-Dev/Round-Anything) library to support this project. Some life events resulted in putting the project down and it lost steam.
+
+My original [landing page](https://lucy-quad.kurthutten.com/) for lucy is still up in a graveyard state. and the [teaser video can be found here](https://vimeo.com/238244710).
+
 # Lucy
 <img src="https://github.com/Irev-Dev/Lucy/blob/master/Images/IMG_3259.JPG" alt="image1" width="50%" align="left"> 
 
